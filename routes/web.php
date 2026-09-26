@@ -1,0 +1,97 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\GuruController;
+use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\EkstrakurikulerController;
+use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\PengumumanController;
+use App\Http\Controllers\PrestasiController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\LoginController;
+
+// PUBLIC ROUTE
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// ADMIN ROUTES
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+// Profil
+Route::get('/admin/profil', [ProfileController::class, 'index'])->name('admin.profil.index');
+Route::put('/admin/profil/{profile}', [ProfileController::class, 'update'])->name('admin.profil.update');
+
+// Guru
+Route::get('/admin/guru', [GuruController::class, 'index'])->name('admin.guru');
+Route::post('/admin/guru', [GuruController::class, 'store'])->name('admin.guru.store');
+Route::put('/admin/guru/{id}', [GuruController::class, 'update'])->name('admin.guru.update');
+Route::delete('/admin/guru/{id}', [GuruController::class, 'destroy'])->name('admin.guru.destroy');
+
+// Modul Lainnya
+// Route::get('/admin/siswa', [SiswaController::class, 'index'])->name('admin.siswa');
+Route::get('/admin/siswa', [SiswaController::class, 'index'])->name('admin.siswa.index');
+Route::post('/admin/siswa', [SiswaController::class, 'store'])->name('admin.siswa.store');
+Route::put('/admin/siswa/{siswa}', [SiswaController::class, 'update'])->name('admin.siswa.update');
+Route::delete('/admin/siswa/{siswa}', [SiswaController::class, 'destroy'])->name('admin.siswa.destroy');
+
+Route::get('/admin/berita', [BeritaController::class, 'index'])->name('admin.berita');
+Route::get('/admin/galeri', [GaleriController::class, 'index'])->name('admin.galeri');
+Route::get('/admin/ekstrakurikuler', [EkstrakurikulerController::class, 'index'])->name('admin.ekstrakurikuler');
+Route::get('/admin/pengumuman', [PengumumanController::class, 'index'])->name('admin.pengumuman');
+Route::get('/admin/prestasi', [PrestasiController::class, 'index'])->name('admin.prestasi');
+
+// User Management (Resource Route)
+Route::resource('/admin/user', UserController::class)->names('admin.user');
+
+//BERITA
+Route::get('/berita', [BeritaController::class, 'index'])->name('admin.berita');
+Route::get('/berita/create', [BeritaController::class, 'create'])->name('admin.berita.create');
+Route::post('/berita', [BeritaController::class, 'store'])->name('admin.berita.store');
+Route::get('/berita/{berita}/edit', [BeritaController::class, 'edit'])->name('admin.berita.edit');
+Route::put('/berita/{berita}', [BeritaController::class, 'update'])->name('admin.berita.update');
+Route::delete('/berita/{berita}', [BeritaController::class, 'destroy'])->name('admin.berita.destroy');
+
+//GALERI
+Route::get('/galeri', [GaleriController::class, 'index'])->name('admin.galeri');
+Route::get('/galeri/create', [GaleriController::class, 'create'])->name('admin.galeri.create');
+Route::post('/galeri', [GaleriController::class, 'store'])->name('admin.galeri.store');
+Route::get('/galeri/{galeri}/edit', [GaleriController::class, 'edit'])->name('admin.galeri.edit');
+Route::put('/galeri/{galeri}', [GaleriController::class, 'update'])->name('admin.galeri.update');
+Route::delete('/galeri/{galeri}', [GaleriController::class, 'destroy'])->name('admin.galeri.destroy');
+
+//ESKUL
+Route::get('/ekstrakurikuler', [EkstrakurikulerController::class, 'index'])->name('admin.ekstrakurikuler');
+Route::get('/ekstrakurikuler/create', [EkstrakurikulerController::class, 'create'])->name('admin.ekstrakurikuler.create');
+Route::post('/ekstrakurikuler', [EkstrakurikulerController::class, 'store'])->name('admin.ekstrakurikuler.store');
+Route::get('/ekstrakurikuler/{ekstrakurikuler}/edit', [EkstrakurikulerController::class, 'edit'])->name('admin.ekstrakurikuler.edit');
+Route::put('/ekstrakurikuler/{ekstrakurikuler}', [EkstrakurikulerController::class, 'update'])->name('admin.ekstrakurikuler.update');
+Route::delete('/ekstrakurikuler/{ekstrakurikuler}', [EkstrakurikulerController::class, 'destroy'])->name('admin.ekstrakurikuler.destroy');
+
+//pengumumn
+Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('admin.pengumuman');
+Route::get('/pengumuman/create', [PengumumanController::class, 'create'])->name('admin.pengumuman.create');
+Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('admin.pengumuman.store');
+Route::get('/pengumuman/{pengumuman}/edit', [PengumumanController::class, 'edit'])->name('admin.pengumuman.edit');
+Route::put('/pengumuman/{pengumuman}', [PengumumanController::class, 'update'])->name('admin.pengumuman.update');
+Route::delete('/pengumuman/{pengumuman}', [PengumumanController::class, 'destroy'])->name('admin.pengumuman.destroy');
+
+//prestasi
+Route::get('/prestasi', [PrestasiController::class, 'index'])->name('admin.prestasi');
+Route::get('/prestasi/create', [PrestasiController::class, 'create'])->name('admin.prestasi.create');
+Route::post('/prestasi', [PrestasiController::class, 'store'])->name('admin.prestasi.store');
+Route::get('/prestasi/{prestasi}/edit', [PrestasiController::class, 'edit'])->name('admin.prestasi.edit');
+Route::put('/prestasi/{prestasi}', [PrestasiController::class, 'update'])->name('admin.prestasi.update');
+Route::delete('/prestasi/{prestasi}', [PrestasiController::class, 'destroy'])->name('admin.prestasi.destroy');
+
+Route::get('/login', [LoginController::class, 'showLogin'])
+    ->name('login');
+
+Route::post('/login', [LoginController::class, 'login'])
+    ->name('login.process');
+
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->name('logout');
