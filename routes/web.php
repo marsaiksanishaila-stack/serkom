@@ -84,27 +84,21 @@ Route::delete('/siswa/{siswa}', [SiswaController::class, 'destroy'])
 
 // USER MANAGEMENT
 Route::get('/user', [UserController::class, 'index'])
-    ->middleware('admin')
     ->name('admin.user.index');
 
 Route::get('/user/create', [UserController::class, 'create'])
-    ->middleware('admin')
     ->name('admin.user.create');
 
 Route::post('/user', [UserController::class, 'store'])
-    ->middleware('admin')
     ->name('admin.user.store');
 
 Route::get('/user/{user}/edit', [UserController::class, 'edit'])
-    ->middleware('admin')
     ->name('admin.user.edit');
 
 Route::put('/user/{user}', [UserController::class, 'update'])
-    ->middleware('admin')
     ->name('admin.user.update');
 
 Route::delete('/user/{user}', [UserController::class, 'destroy'])
-    ->middleware('admin')
     ->name('admin.user.destroy');
 
 // BERITA
@@ -200,4 +194,4 @@ Route::put('/prestasi/{prestasi}', [PrestasiController::class, 'update'])
     ->name('admin.prestasi.update');
 
 Route::delete('/prestasi/{prestasi}', [PrestasiController::class, 'destroy'])
-    ->name('admin.prestasi.destroy'); 
+    ->name('admin.prestasi.destroy');
