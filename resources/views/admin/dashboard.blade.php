@@ -30,7 +30,7 @@
 
             </div>
 
-            <div class="heading-actions">
+            <!-- <div class="heading-actions">
 
                 <a href="{{ route('admin.siswa.index') }}"
                    class="btn btn-primary btn-sm rounded-3 shadow-sm">
@@ -40,19 +40,15 @@
 
                 </a>
 
-            </div>
+            </div> -->
 
         </div>
 
 
         {{-- STATISTIK --}}
-
         <section class="row g-3 mb-4">
-
             {{-- TOTAL SISWA --}}
-
             <div class="col-12 col-sm-6 col-xl-4">
-
                 <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
 
                     <div class="d-flex justify-content-between align-items-center mb-2">
