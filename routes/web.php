@@ -26,26 +26,45 @@ Route::get('/admin/profil', [ProfileController::class, 'index'])->name('admin.pr
 Route::put('/admin/profil/{profile}', [ProfileController::class, 'update'])->name('admin.profil.update');
 
 // Guru
-Route::get('/admin/guru', [GuruController::class, 'index'])->name('admin.guru');
-Route::post('/admin/guru', [GuruController::class, 'store'])->name('admin.guru.store');
-Route::put('/admin/guru/{id}', [GuruController::class, 'update'])->name('admin.guru.update');
-Route::delete('/admin/guru/{id}', [GuruController::class, 'destroy'])->name('admin.guru.destroy');
+// Route::get('/admin/guru', [GuruController::class, 'index'])->name('admin.guru');
+// Route::post('/admin/guru', [GuruController::class, 'store'])->name('admin.guru.store');
+// Route::put('/admin/guru/{id}', [GuruController::class, 'update'])->name('admin.guru.update');
+// Route::delete('/admin/guru/{id}', [GuruController::class, 'destroy'])->name('admin.guru.destroy');
 
-// Modul Lainnya
-// Route::get('/admin/siswa', [SiswaController::class, 'index'])->name('admin.siswa');
-Route::get('/admin/siswa', [SiswaController::class, 'index'])->name('admin.siswa.index');
-Route::post('/admin/siswa', [SiswaController::class, 'store'])->name('admin.siswa.store');
-Route::put('/admin/siswa/{siswa}', [SiswaController::class, 'update'])->name('admin.siswa.update');
-Route::delete('/admin/siswa/{siswa}', [SiswaController::class, 'destroy'])->name('admin.siswa.destroy');
+Route::get('/guru', [GuruController::class, 'index'])->name('admin.guru');
+Route::get('/guru/create', [GuruController::class, 'create'])->middleware('admin')->name('admin.guru.create');
+Route::post('/guru', [GuruController::class, 'store'])->middleware('admin')->name('admin.guru.store');
+Route::get('/guru/{guru}/edit', [GuruController::class, 'edit'])->middleware('admin')->name('admin.guru.edit');
+Route::put('/guru/{guru}', [GuruController::class, 'update'])->middleware('admin')->name('admin.guru.update');
+Route::delete('/guru/{guru}', [GuruController::class, 'destroy'])->middleware('admin')->name('admin.guru.destroy');
 
-Route::get('/admin/berita', [BeritaController::class, 'index'])->name('admin.berita');
-Route::get('/admin/galeri', [GaleriController::class, 'index'])->name('admin.galeri');
-Route::get('/admin/ekstrakurikuler', [EkstrakurikulerController::class, 'index'])->name('admin.ekstrakurikuler');
-Route::get('/admin/pengumuman', [PengumumanController::class, 'index'])->name('admin.pengumuman');
-Route::get('/admin/prestasi', [PrestasiController::class, 'index'])->name('admin.prestasi');
+// siswa
+// Route::get('/admin/siswa', [SiswaController::class, 'index'])->name('admin.siswa.index');
+// Route::post('/admin/siswa', [SiswaController::class, 'store'])->name('admin.siswa.store');
+// Route::put('/admin/siswa/{siswa}', [SiswaController::class, 'update'])->name('admin.siswa.update');
+// Route::delete('/admin/siswa/{siswa}', [SiswaController::class, 'destroy'])->name('admin.siswa.destroy');
+
+Route::get('/siswa', [SiswaController::class, 'index'])->name('admin.siswa');
+Route::get('/siswa/create', [SiswaController::class, 'create'])->middleware('admin')->name('admin.siswa.create');
+Route::post('/siswa', [SiswaController::class, 'store'])->middleware('admin')->name('admin.siswa.store');
+Route::get('/siswa/{siswa}/edit', [SiswaController::class, 'edit'])->middleware('admin')->name('admin.siswa.edit');
+Route::put('/siswa/{siswa}', [SiswaController::class, 'update'])->middleware('admin')->name('admin.siswa.update');
+Route::delete('/siswa/{siswa}', [SiswaController::class, 'destroy'])->middleware('admin')->name('admin.siswa.destroy');
+
+// Route::get('/admin/berita', [BeritaController::class, 'index'])->name('admin.berita');
+// Route::get('/admin/galeri', [GaleriController::class, 'index'])->name('admin.galeri');
+// Route::get('/admin/ekstrakurikuler', [EkstrakurikulerController::class, 'index'])->name('admin.ekstrakurikuler');
+// Route::get('/admin/pengumuman', [PengumumanController::class, 'index'])->name('admin.pengumuman');
+// Route::get('/admin/prestasi', [PrestasiController::class, 'index'])->name('admin.prestasi');
 
 // User Management (Resource Route)
-Route::resource('/admin/user', UserController::class)->names('admin.user');
+// Route::resource('/admin/user', UserController::class)->names('admin.user');
+Route::get('/user', [UserController::class, 'index'])->middleware('admin')->name('admin.user');
+Route::get('/user/create', [UserController::class, 'create'])->middleware('admin')->name('admin.user.create');
+Route::post('/user', [UserController::class, 'store'])->middleware('admin')->name('admin.user.store');
+Route::get('/user/{user}/edit', [UserController::class, 'edit'])->middleware('admin')->name('admin.user.edit');
+Route::put('/user/{user}', [UserController::class, 'update'])->middleware('admin')->name('admin.user.update');
+Route::delete('/user/{user}', [UserController::class, 'destroy'])->middleware('admin')->name('admin.user.destroy');
 
 //BERITA
 Route::get('/berita', [BeritaController::class, 'index'])->name('admin.berita');

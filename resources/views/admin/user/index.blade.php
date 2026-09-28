@@ -2,23 +2,38 @@
 
 @section('content')
 <div class="container-fluid px-3 px-lg-4 py-4">
+
     <!-- PAGE TITLE & ACTION -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
             <h3 class="fw-bold mb-1">Kelola User</h3>
             <p class="text-muted mb-0">Kelola data pengguna sistem sekolah</p>
         </div>
-        <a href="{{ route('admin.user.create') }}" class="btn btn-primary d-inline-flex align-items-center gap-2">
-            <i class="bi bi-plus-lg"></i>
-            <span>Tambah User</span>
-        </a>
+
+        @if(Auth::user()->role == 'Admin')
+            <a href="{{ route('admin.user.create') }}"
+               class="btn btn-primary d-inline-flex align-items-center gap-2">
+                <i class="bi bi-plus-lg"></i>
+                <span>Tambah User</span>
+            </a>
+        @endif
     </div>
 
     <!-- ALERT SUCCESS -->
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <i class="bi bi-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    <!-- ALERT ERROR -->
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
 
@@ -39,38 +54,63 @@
                     <tbody>
                         @forelse($users as $user)
                             <tr>
-                                <td class="ps-3 fw-medium text-muted">{{ $loop->iteration }}</td>
+                                <td class="ps-3 fw-medium text-muted">
+                                    {{ $loop->iteration }}
+                                </td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 38px; height: 38px;">
+                                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                             style="width: 38px; height: 38px;">
                                             <i class="bi bi-person-fill fs-5"></i>
                                         </div>
-                                        <span class="fw-semibold text-dark">{{ $user->username }}</span>
+                                        <span class="fw-semibold text-dark">
+                                            {{ $user->username }}
+                                        </span>
                                     </div>
                                 </td>
                                 <td>
                                     @if($user->role == 'Admin')
-                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3">Admin</span>
+                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3">
+                                            Admin
+                                        </span>
                                     @else
-                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-3">Operator</span>
+                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-3">
+                                            Operator
+                                        </span>
                                     @endif
                                 </td>
                                 <td class="text-muted">
                                     {{ $user->created_at ? $user->created_at->format('d/m/Y') : '-' }}
                                 </td>
+
+                                <!-- AKSI -->
                                 <td class="text-end pe-3">
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="{{ route('admin.user.edit', $user->id_user) }}" class="btn btn-outline-warning" title="Edit User">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <form action="{{ route('admin.user.destroy', $user->id_user) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus user ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger" title="Hapus User">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
+                                    @if(Auth::user()->role == 'Admin')
+                                        <div class="btn-group btn-group-sm">
+                                            <!-- EDIT -->
+                                            <a href="{{ route('admin.user.edit', $user->id_user) }}"
+                                               class="btn btn-outline-warning"
+                                               title="Edit User">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+
+                                            <!-- HAPUS -->
+                                            <form action="{{ route('admin.user.destroy', $user->id_user) }}"
+                                                  method="POST"
+                                                  class="d-inline"
+                                                  onsubmit="return confirm('Yakin ingin menghapus user ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-outline-danger"
+                                                        title="Hapus User">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <span class="text-muted small">-</span>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
