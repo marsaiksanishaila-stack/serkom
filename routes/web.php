@@ -29,7 +29,7 @@ Route::get('/admin/dashboard', [DashboardController::class, 'index'])
 
 // PROFIL
 Route::get('/admin/profil', [ProfileController::class, 'index'])
-    ->name('admin.profil.index');
+    ->name('admin.profil');
 
 Route::put('/admin/profil/{profile}', [ProfileController::class, 'update'])
     ->name('admin.profil.update');

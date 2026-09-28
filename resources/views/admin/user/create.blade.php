@@ -74,7 +74,7 @@
 
                 <!-- ACTION BUTTONS -->
                 <div class="d-flex align-items-center gap-2">
-                    <a href="{{ route('admin.user.index') }}" class="btn btn-secondary px-4">
+                    <a href="{{ route('admin.user') }}" class="btn btn-secondary px-4">
                         Kembali
                     </a>
                     <button type="submit" class="btn btn-primary px-4 d-inline-flex align-items-center gap-2">

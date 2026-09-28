@@ -77,7 +77,7 @@
                 <div class="d-flex align-items-center gap-2">
                     <a href="{{ route('admin.user.index') }}" class="btn btn-secondary px-4">
                         Kembali
-                    </a>
+                    </a>        
                     <button type="submit" class="btn btn-primary px-4 d-inline-flex align-items-center gap-2">
                         <i class="bi bi-save"></i>
                         <span>Simpan Perubahan</span>

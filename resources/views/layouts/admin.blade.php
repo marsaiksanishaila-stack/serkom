@@ -41,13 +41,13 @@
                 </a>
 
                 <a href="{{ route('admin.user.index') }}"
-                    class="sidebar-menu-link {{ request()->routeIs('admin.user.*') ? 'active' : '' }}" id="menu-user"
+                    class="sidebar-menu-link {{ request()->routeIs('admin.user.index') ? 'active' : '' }}" id="menu-user"
                     title="Kelola User">
                     <span class="nav-icon"><i class="bi bi-person-gear" aria-hidden="true"></i></span>
                     <span class="nav-text">Kelola User</span>
                 </a>
 
-                <a href="{{ route('admin.profil.index') }}"
+                <a href="{{ route('admin.profil') }}"
                     class="sidebar-menu-link {{ request()->routeIs('admin.profil') ? 'active' : '' }}" id="menu-profil"
                     title="Profil Sekolah">
                     <span class="nav-icon"><i class="bi bi-building-fill" aria-hidden="true"></i></span>
