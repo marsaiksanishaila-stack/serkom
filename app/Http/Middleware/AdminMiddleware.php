@@ -14,10 +14,9 @@ class AdminMiddleware
             return redirect()->route('login');
         }
 
-        dd([
-            'username' => auth()->user()->username,
-            'role' => auth()->user()->role,
-        ]);
+        if (!in_array(auth()->user()->role, ['Admin', 'Operator'])) {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
 
         return $next($request);
     }

@@ -10,7 +10,24 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        $siswas = Siswa::orderBy('id_siswa', 'desc')->paginate(10);
+        $query = Siswa::query();
+
+        if (request('search')) {
+            $search = request('search');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_siswa', 'like', '%' . $search . '%')
+                  ->orWhere('nisn', 'like', '%' . $search . '%')
+                  ->orWhere('jenis_kelamin', 'like', '%' . $search . '%')
+                  ->orWhere('tahun_masuk', 'like', '%' . $search . '%');
+            });
+        }
+
+        $siswas = $query
+            ->orderBy('id_siswa', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
         return view('admin.siswa', compact('siswas'));
     }
 
@@ -18,20 +35,27 @@ class SiswaController extends Controller
     {
         Siswa::create($request->validated());
 
-        return redirect()->route('admin.siswa.index')->with('success', 'Data siswa berhasil ditambahkan!');
+        return redirect()
+            ->route('admin.siswa.index')
+            ->with('success', 'Data siswa berhasil ditambahkan!');
     }
 
     public function update(UpdateSiswaRequest $request, Siswa $siswa)
     {
         $siswa->update($request->validated());
 
-        return redirect()->route('admin.siswa.index')->with('success', 'Data siswa berhasil diperbarui!');
+        return redirect()
+            ->route('admin.siswa.index')
+            ->with('success', 'Data siswa berhasil diperbarui!');
     }
 
     public function destroy(Siswa $siswa)
     {
         $siswa->delete();
 
-        return redirect()->route('admin.siswa.index')->with('success', 'Data siswa berhasil dihapus!');
+        return redirect()
+            ->route('admin.siswa.index')
+            ->with('success', 'Data siswa berhasil dihapus!');
     }
 }
+

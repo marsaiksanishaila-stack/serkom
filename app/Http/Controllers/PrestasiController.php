@@ -8,9 +8,19 @@ use Illuminate\Support\Facades\Storage;
 
 class PrestasiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $prestasis = Prestasi::latest('tahun_ajaran')->get();
+        $query = Prestasi::latest('tahun_ajaran');
+
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nama_prestasi', 'like', '%' . $request->search . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $request->search . '%')
+                  ->orWhere('tahun_ajaran', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $prestasis = $query->get();
 
         return view('admin.prestasi.index', compact('prestasis'));
     }
@@ -35,7 +45,8 @@ class PrestasiController extends Controller
 
         Prestasi::create($data);
 
-        return redirect()->route('admin.prestasi')
+        return redirect()
+            ->route('admin.prestasi')
             ->with('success', 'Prestasi berhasil ditambahkan.');
     }
 
@@ -63,7 +74,8 @@ class PrestasiController extends Controller
 
         $prestasi->update($data);
 
-        return redirect()->route('admin.prestasi')
+        return redirect()
+            ->route('admin.prestasi')
             ->with('success', 'Prestasi berhasil diperbarui.');
     }
 
@@ -75,7 +87,8 @@ class PrestasiController extends Controller
 
         $prestasi->delete();
 
-        return redirect()->route('admin.prestasi')
+        return redirect()
+            ->route('admin.prestasi')
             ->with('success', 'Prestasi berhasil dihapus.');
     }
 }

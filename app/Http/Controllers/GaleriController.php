@@ -8,9 +8,26 @@ use Illuminate\Support\Facades\Storage;
 
 class GaleriController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $galeris = Galeri::latest('tanggal')->get();
+        $query = Galeri::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', '%' . $search . '%')
+                    ->orWhere('keterangan', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($request->filled('kategori') && in_array($request->kategori, ['Foto', 'Video'])) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        $galeris = $query
+            ->latest('tanggal')
+            ->get();
 
         return view('admin.galeri.index', compact('galeris'));
     }

@@ -3,7 +3,6 @@
 @section('content')
 <div class="container-fluid px-3 px-lg-4 py-4">
 
-    <!-- PAGE TITLE & ACTIONS -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">Kelola Data Guru</h4>
@@ -20,7 +19,6 @@
         @endif
     </div>
 
-    <!-- ALERT SUCCESS -->
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="bi bi-check-circle me-2"></i>
@@ -29,7 +27,6 @@
         </div>
     @endif
 
-    <!-- ALERT ERROR -->
     @if(session('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-circle me-2"></i>
@@ -38,7 +35,6 @@
         </div>
     @endif
 
-    <!-- VALIDATION ERROR -->
     @if($errors->any())
         <div class="alert alert-danger">
             <ul class="mb-0">
@@ -49,11 +45,36 @@
         </div>
     @endif
 
+    <!-- PENCARIAN -->
+    <div class="mb-3">
+        <form action="{{ route('admin.guru') }}" method="GET">
+            <div class="input-group" style="max-width: 400px;">
+                <input type="text"
+                       name="search"
+                       class="form-control"
+                       placeholder="Cari nama, NIP, atau mapel..."
+                       value="{{ request('search') }}">
+
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+
+                @if(request('search'))
+                    <a href="{{ route('admin.guru') }}"
+                       class="btn btn-secondary">
+                        Reset
+                    </a>
+                @endif
+            </div>
+        </form>
+    </div>
+
     <!-- TABLE CARD -->
     <div class="card border-0 shadow-sm">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
+
                     <thead class="bg-light">
                         <tr>
                             <th class="ps-3" style="width: 50px;">No</th>
@@ -64,12 +85,15 @@
                             <th class="text-end pe-3" style="width: 130px;">Aksi</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @forelse ($gurus as $index => $guru)
                             <tr>
+
                                 <td class="ps-3 fw-medium text-muted">
                                     {{ $loop->iteration }}
                                 </td>
+
                                 <td>
                                     @if($guru->foto)
                                         <img src="{{ asset('storage/guru/' . $guru->foto) }}"
@@ -84,25 +108,27 @@
                                         </div>
                                     @endif
                                 </td>
+
                                 <td>
                                     <span class="fw-semibold text-dark">
                                         {{ $guru->nama_guru }}
                                     </span>
                                 </td>
+
                                 <td>
                                     {{ $guru->nip ?? '-' }}
                                 </td>
+
                                 <td>
                                     <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill">
                                         {{ $guru->mapel ?? 'Belum Diatur' }}
                                     </span>
                                 </td>
 
-                                <!-- AKSI -->
                                 <td class="text-end pe-3">
                                     @if(Auth::user()->role == 'Admin')
                                         <div class="btn-group btn-group-sm">
-                                            <!-- EDIT -->
+
                                             <button class="btn btn-outline-warning"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#modalEditGuru{{ $guru->id_guru }}"
@@ -110,13 +136,13 @@
                                                 <i class="bi bi-pencil"></i>
                                             </button>
 
-                                            <!-- HAPUS -->
                                             <button class="btn btn-outline-danger"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#modalHapusGuru{{ $guru->id_guru }}"
                                                     title="Hapus Data">
                                                 <i class="bi bi-trash"></i>
                                             </button>
+
                                         </div>
                                     @else
                                         <span class="text-muted small">-</span>
@@ -125,21 +151,28 @@
                             </tr>
 
                             @if(Auth::user()->role == 'Admin')
+
                                 <!-- MODAL EDIT GURU -->
                                 <div class="modal fade"
                                      id="modalEditGuru{{ $guru->id_guru }}"
                                      tabindex="-1"
                                      aria-hidden="true">
+
                                     <div class="modal-dialog">
                                         <div class="modal-content">
+
                                             <form action="{{ route('admin.guru.update', $guru->id_guru) }}"
                                                   method="POST"
                                                   enctype="multipart/form-data">
+
                                                 @csrf
                                                 @method('PUT')
 
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title fw-bold">Edit Data Guru</h5>
+                                                    <h5 class="modal-title fw-bold">
+                                                        Edit Data Guru
+                                                    </h5>
+
                                                     <button type="button"
                                                             class="btn-close"
                                                             data-bs-dismiss="modal"
@@ -147,10 +180,12 @@
                                                 </div>
 
                                                 <div class="modal-body">
+
                                                     <div class="mb-3">
                                                         <label class="form-label">
                                                             Nama Guru <span class="text-danger">*</span>
                                                         </label>
+
                                                         <input type="text"
                                                                name="nama_guru"
                                                                class="form-control"
@@ -160,7 +195,10 @@
                                                     </div>
 
                                                     <div class="mb-3">
-                                                        <label class="form-label">NIP</label>
+                                                        <label class="form-label">
+                                                            NIP
+                                                        </label>
+
                                                         <input type="text"
                                                                name="nip"
                                                                class="form-control"
@@ -169,7 +207,10 @@
                                                     </div>
 
                                                     <div class="mb-3">
-                                                        <label class="form-label">Mata Pelajaran</label>
+                                                        <label class="form-label">
+                                                            Mata Pelajaran
+                                                        </label>
+
                                                         <input type="text"
                                                                name="mapel"
                                                                class="form-control"
@@ -178,25 +219,39 @@
                                                     </div>
 
                                                     <div class="mb-3">
-                                                        <label class="form-label">Foto</label>
+                                                        <label class="form-label">
+                                                            Foto
+                                                        </label>
+
                                                         <input type="file"
                                                                name="foto"
                                                                class="form-control"
                                                                accept="image/*">
+
                                                         <small class="text-muted">
                                                             Biarkan kosong jika tidak ingin mengubah foto.
                                                         </small>
                                                     </div>
+
                                                 </div>
 
                                                 <div class="modal-footer">
+
                                                     <button type="button"
                                                             class="btn btn-light"
-                                                            data-bs-dismiss="modal">Batal</button>
+                                                            data-bs-dismiss="modal">
+                                                        Batal
+                                                    </button>
+
                                                     <button type="submit"
-                                                            class="btn btn-warning">Simpan Perubahan</button>
+                                                            class="btn btn-warning">
+                                                        Simpan Perubahan
+                                                    </button>
+
                                                 </div>
+
                                             </form>
+
                                         </div>
                                     </div>
                                 </div>
@@ -206,43 +261,76 @@
                                      id="modalHapusGuru{{ $guru->id_guru }}"
                                      tabindex="-1"
                                      aria-hidden="true">
+
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
+
                                             <form action="{{ route('admin.guru.destroy', $guru->id_guru) }}"
                                                   method="POST">
+
                                                 @csrf
                                                 @method('DELETE')
 
                                                 <div class="modal-body text-center pt-4">
+
                                                     <i class="bi bi-exclamation-triangle text-warning display-4"></i>
-                                                    <h5 class="fw-bold mt-3">Konfirmasi Hapus</h5>
+
+                                                    <h5 class="fw-bold mt-3">
+                                                        Konfirmasi Hapus
+                                                    </h5>
+
                                                     <p class="text-muted">
                                                         Apakah Anda yakin ingin menghapus data
                                                         <strong>{{ $guru->nama_guru }}</strong>?
                                                     </p>
+
                                                 </div>
 
                                                 <div class="modal-footer justify-content-center border-0 pb-4">
+
                                                     <button type="button"
                                                             class="btn btn-light px-4"
-                                                            data-bs-dismiss="modal">Batal</button>
+                                                            data-bs-dismiss="modal">
+                                                        Batal
+                                                    </button>
+
                                                     <button type="submit"
-                                                            class="btn btn-danger px-4">Ya, Hapus</button>
+                                                            class="btn btn-danger px-4">
+                                                        Ya, Hapus
+                                                    </button>
+
                                                 </div>
+
                                             </form>
+
                                         </div>
                                     </div>
                                 </div>
+
                             @endif
+
                         @empty
+
                             <tr>
-                                <td colspan="6" class="text-center py-5 text-muted">
+                                <td colspan="6"
+                                    class="text-center py-5 text-muted">
+
                                     <i class="bi bi-person-workspace display-6 d-block mb-2"></i>
-                                    <span>Belum ada data guru yang tersimpan.</span>
+
+                                    <span>
+                                        @if(request('search'))
+                                            Data guru tidak ditemukan.
+                                        @else
+                                            Belum ada data guru yang tersimpan.
+                                        @endif
+                                    </span>
+
                                 </td>
                             </tr>
+
                         @endforelse
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -251,75 +339,115 @@
 
 <!-- MODAL TAMBAH GURU -->
 @if(Auth::user()->role == 'Admin')
+
     <div class="modal fade"
          id="modalTambahGuru"
          tabindex="-1"
          aria-hidden="true">
+
         <div class="modal-dialog">
             <div class="modal-content">
+
                 <form action="{{ route('admin.guru.store') }}"
                       method="POST"
                       enctype="multipart/form-data">
+
                     @csrf
 
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold">Tambah Data Guru</h5>
+
+                        <h5 class="modal-title fw-bold">
+                            Tambah Data Guru
+                        </h5>
+
                         <button type="button"
                                 class="btn-close"
                                 data-bs-dismiss="modal"
                                 aria-label="Close"></button>
+
                     </div>
 
                     <div class="modal-body">
+
                         <div class="mb-3">
+
                             <label class="form-label">
                                 Nama Guru <span class="text-danger">*</span>
                             </label>
+
                             <input type="text"
                                    name="nama_guru"
                                    class="form-control"
                                    placeholder="Masukkan nama guru"
                                    maxlength="40"
                                    required>
+
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">NIP</label>
+
+                            <label class="form-label">
+                                NIP
+                            </label>
+
                             <input type="text"
                                    name="nip"
                                    class="form-control"
                                    placeholder="Masukkan NIP"
                                    maxlength="15">
+
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Mata Pelajaran</label>
+
+                            <label class="form-label">
+                                Mata Pelajaran
+                            </label>
+
                             <input type="text"
                                    name="mapel"
                                    class="form-control"
                                    placeholder="Contoh: Matematika"
                                    maxlength="40">
+
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Foto Guru</label>
+
+                            <label class="form-label">
+                                Foto Guru
+                            </label>
+
                             <input type="file"
                                    name="foto"
                                    class="form-control"
                                    accept="image/*">
+
                         </div>
+
                     </div>
 
                     <div class="modal-footer">
+
                         <button type="button"
                                 class="btn btn-light"
-                                data-bs-dismiss="modal">Batal</button>
+                                data-bs-dismiss="modal">
+                            Batal
+                        </button>
+
                         <button type="submit"
-                                class="btn btn-primary">Simpan</button>
+                                class="btn btn-primary">
+                            Simpan
+                        </button>
+
                     </div>
+
                 </form>
+
             </div>
         </div>
     </div>
+
 @endif
+
 @endsection

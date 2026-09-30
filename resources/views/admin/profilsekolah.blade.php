@@ -139,7 +139,7 @@
         <div class="tab-pane fade" id="edit-pane" role="tabpanel" tabindex="0">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-4">
-                    <form action="{{ route('admin.profil.update', $profile->id_profile ?? 1) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.profilsekolah.update', $profile->id_profile ?? 1) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 

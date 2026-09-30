@@ -20,9 +20,33 @@
             {{ session('success') }}
         </div>
     @endif
-
+ 
     <div class="card border-0 shadow-sm">
         <div class="card-body">
+
+            <div class="mb-3" style="max-width: 400px;">
+                <form action="{{ route('admin.prestasi') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text"
+                               name="search"
+                               class="form-control"
+                               placeholder="Cari prestasi..."
+                               value="{{ request('search') }}">
+
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+
+                        @if(request('search'))
+                            <a href="{{ route('admin.prestasi') }}"
+                            class="btn btn-secondary">
+                                Reset
+                            </a>
+                        @endif
+                        
+                    </div>
+                </form>
+            </div>
 
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
@@ -74,6 +98,7 @@
                                        class="btn btn-warning btn-sm">
                                         Edit
                                     </a>
+
                                     <form action="{{ route('admin.prestasi.destroy', $prestasi->id_prestasi) }}"
                                           method="POST"
                                           class="d-inline"
@@ -88,19 +113,32 @@
                                         </button>
                                     </form>
                                 </td>
+
                             </tr>
+
                         @empty
+
                             <tr>
                                 <td colspan="6" class="text-center py-4">
-                                    Belum ada data prestasi.
+                                    @if(request('search'))
+                                        Data prestasi tidak ditemukan.
+                                    @else
+                                        Belum ada data prestasi.
+                                    @endif
                                 </td>
                             </tr>
+
                         @endforelse
+
                     </tbody>
+
                 </table>
             </div>
+
         </div>
     </div>
+
 </div>
 
 @endsection
+

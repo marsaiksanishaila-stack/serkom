@@ -7,9 +7,21 @@ use Illuminate\Http\Request;
 
 class PengumumanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pengumumans = Pengumuman::latest('tanggal')->get();
+        $query = Pengumuman::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', '%' . $search . '%')
+                    ->orWhere('isi', 'like', '%' . $search . '%')
+                    ->orWhere('status', 'like', '%' . $search . '%');
+            });
+        }
+
+        $pengumumans = $query->latest('tanggal')->get();
 
         return view('admin.pengumuman.index', compact('pengumumans'));
     }

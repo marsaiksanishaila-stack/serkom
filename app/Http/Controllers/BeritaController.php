@@ -4,14 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Berita;
 use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class BeritaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $beritas = Berita::with('user')
+        $query = Berita::with('user');
+
+        if ($request->filled('search')) {
+            $query->where('judul', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $beritas = $query
             ->latest('tanggal')
             ->get();
 
@@ -29,6 +38,7 @@ class BeritaController extends Controller
             'judul' => 'required|max:100',
             'isi' => 'required',
             'tanggal' => 'required|date',
+            'status' => 'required|in:Draft,Public',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
@@ -43,7 +53,8 @@ class BeritaController extends Controller
             'isi' => $request->isi,
             'tanggal' => $request->tanggal,
             'foto' => $foto,
-            'id_user' => 1,
+            'status' => $request->status,
+            'id_user' => auth()->user()->id_user,
         ]);
 
         return redirect()
@@ -62,6 +73,7 @@ class BeritaController extends Controller
             'judul' => 'required|max:100',
             'isi' => 'required',
             'tanggal' => 'required|date',
+            'status' => 'required|in:Draft,Public',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
@@ -80,6 +92,7 @@ class BeritaController extends Controller
             'isi' => $request->isi,
             'tanggal' => $request->tanggal,
             'foto' => $foto,
+            'status' => $request->status,
         ]);
 
         return redirect()

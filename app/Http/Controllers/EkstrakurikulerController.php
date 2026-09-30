@@ -8,9 +8,22 @@ use Illuminate\Support\Facades\Storage;
 
 class EkstrakurikulerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $ekstrakurikulers = Ekstrakurikuler::latest()->get();
+        $query = Ekstrakurikuler::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_ekskul', 'like', '%' . $search . '%')
+                    ->orWhere('pembina', 'like', '%' . $search . '%')
+                    ->orWhere('jadwal_latihan', 'like', '%' . $search . '%')
+                    ->orWhere('deskripsi', 'like', '%' . $search . '%');
+            });
+        }
+
+        $ekstrakurikulers = $query->latest()->get();
 
         return view('admin.ekstrakurikuler.index', compact('ekstrakurikulers'));
     }

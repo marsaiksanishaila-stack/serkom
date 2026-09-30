@@ -10,7 +10,6 @@
       document.addEventListener("DOMContentLoaded", callback);
       return;
     }
-
     callback();
   }
 
@@ -33,7 +32,6 @@
     if (!storageAvailable) {
       return false;
     }
-
     return window.localStorage.getItem(sidebarStorageKey) === "true";
   }
 
@@ -44,13 +42,18 @@
   }
 
   function getPreferredTheme(storageAvailable) {
-    var savedTheme = storageAvailable ? window.localStorage.getItem(themeStorageKey) : "";
+    var savedTheme = storageAvailable
+      ? window.localStorage.getItem(themeStorageKey)
+      : "";
 
     if (savedTheme === "dark" || savedTheme === "light") {
       return savedTheme;
     }
 
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
       return "dark";
     }
 
@@ -59,11 +62,15 @@
 
   onReady(function () {
     var body = document.body;
+
     var sidebarToggle = document.querySelector("[data-sidebar-toggle]");
     var themeToggles = document.querySelectorAll("[data-theme-toggle]");
     var themeIcons = document.querySelectorAll("[data-theme-icon]");
     var closeButtons = document.querySelectorAll("[data-sidebar-close]");
-    var sidebarLinks = document.querySelectorAll(".sidebar-nav .nav-link");
+    var sidebarLinks = document.querySelectorAll(
+      ".sidebar-nav .sidebar-menu-link"
+    );
+
     var mediaQuery = window.matchMedia(desktopMedia);
     var storageAvailable = canUseStorage();
 
@@ -76,7 +83,6 @@
             event.preventDefault();
             event.stopPropagation();
           }
-
           form.classList.add("was-validated");
         });
       });
@@ -98,7 +104,9 @@
           var rows = table.querySelectorAll("tbody tr");
 
           Array.prototype.forEach.call(rows, function (row) {
-            row.hidden = query !== "" && row.textContent.toLowerCase().indexOf(query) === -1;
+            row.hidden =
+              query !== "" &&
+              row.textContent.toLowerCase().indexOf(query) === -1;
           });
         });
       });
@@ -135,34 +143,78 @@
 
       Array.prototype.forEach.call(themeToggles, function (button) {
         button.addEventListener("click", function () {
-          var currentTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+          var currentTheme =
+            document.documentElement.getAttribute("data-theme") === "dark"
+              ? "dark"
+              : "light";
+
           applyTheme(currentTheme === "dark" ? "light" : "dark");
         });
       });
     }
 
-    initValidation();
-    initTableSearch();
-    initThemeToggle();
-
-    // Initialize user profile values in UI. Provide a window.adminHMDUser object to override defaults.
     function initUserProfile() {
-      var user = window.adminHMDUser || { name: "Admin Hasan", workspace: "Active Workspace", avatar: "../assets/images/avatar/avatar.jpg" };
+      var user = window.adminHMDUser || {
+        name: "Admin",
+        workspace: "Administrator",
+        avatar: "../assets/images/avatar/avatar.jpg"
+      };
 
       var sidebarNameEl = document.querySelector(".sidebar-user strong");
       var sidebarWorkspaceEl = document.querySelector(".sidebar-user small");
       var sidebarAvatar = document.querySelector(".sidebar-user .avatar-img");
+      var sidebarInitialEl = document.querySelector(".sidebar-user .avatar-initial");
+
       var profileNameEls = document.querySelectorAll(".profile-name");
-      var profileAvatarEls = document.querySelectorAll(".profile-button .avatar-img, .profile-button img");
+      var profileAvatarEls = document.querySelectorAll(
+        ".profile-button .avatar-img, .profile-button img"
+      );
+      var profileInitialEls = document.querySelectorAll(
+        ".profile-button .avatar-initial"
+      );
 
-      if (sidebarNameEl) sidebarNameEl.textContent = user.name;
-      if (sidebarWorkspaceEl) sidebarWorkspaceEl.textContent = user.workspace;
-      if (sidebarAvatar && user.avatar) { sidebarAvatar.src = user.avatar; sidebarAvatar.alt = user.name; }
+      // Ambil 2 karakter pertama nama untuk inisial (misal: "SH" dari "shailamarsaiksani")
+      var initials = user.name ? user.name.substring(0, 2).toUpperCase() : "AD";
 
-      Array.prototype.forEach.call(profileNameEls, function (el) { el.textContent = user.name; });
-      Array.prototype.forEach.call(profileAvatarEls, function (img) { if (user.avatar) img.src = user.avatar; if (user.name) img.alt = user.name; });
+      if (sidebarNameEl) {
+        sidebarNameEl.textContent = user.name;
+      }
+
+      if (sidebarWorkspaceEl) {
+        sidebarWorkspaceEl.textContent = user.workspace;
+      }
+
+      if (sidebarAvatar && user.avatar) {
+        sidebarAvatar.src = user.avatar;
+        sidebarAvatar.alt = user.name;
+      }
+
+      if (sidebarInitialEl) {
+        sidebarInitialEl.textContent = initials;
+      }
+
+      Array.prototype.forEach.call(profileNameEls, function (el) {
+        el.textContent = user.name;
+      });
+
+      Array.prototype.forEach.call(profileInitialEls, function (el) {
+        el.textContent = initials;
+      });
+
+      Array.prototype.forEach.call(profileAvatarEls, function (img) {
+        if (user.avatar) {
+          img.src = user.avatar;
+        }
+        if (user.name) {
+          img.alt = user.name;
+        }
+      });
     }
 
+    // Jalankan inisialisasi
+    initValidation();
+    initTableSearch();
+    initThemeToggle();
     initUserProfile();
 
     if (!sidebarToggle) {
@@ -193,7 +245,10 @@
     function toggleSidebar() {
       if (isDesktop()) {
         body.classList.toggle("sidebar-mini");
-        saveMiniState(storageAvailable, body.classList.contains("sidebar-mini"));
+        saveMiniState(
+          storageAvailable,
+          body.classList.contains("sidebar-mini")
+        );
       } else {
         body.classList.toggle("sidebar-open");
       }
@@ -216,14 +271,20 @@
     }
 
     sidebarToggle.addEventListener("click", toggleSidebar);
+
     addCloseHandlers(closeButtons);
     addCloseHandlers(sidebarLinks);
+
     setToggleExpanded();
 
     function handleBreakpointChange() {
       if (isDesktop()) {
         body.classList.remove("sidebar-open");
-        setClass(body, "sidebar-mini", getSavedMiniState(storageAvailable));
+        setClass(
+          body,
+          "sidebar-mini",
+          getSavedMiniState(storageAvailable)
+        );
       } else {
         body.classList.remove("sidebar-mini");
       }

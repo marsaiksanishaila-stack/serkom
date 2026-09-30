@@ -14,14 +14,14 @@ class ProfileController extends Controller
         $profile = Profile::firstOrCreate(
             ['id_profile' => 1],
             [
-                'nama_sekolah' => 'SMK Negeri 1 Singaparna',
+                'nama_sekolah' => 'SMK YPC Tasikmalaya',
                 'kepala_sekolah' => 'Nama Kepala Sekolah'
             ]
         );
 
         $siswas = Siswa::paginate(10);
 
-        return view('admin.profil', compact('profile', 'siswas'));
+        return view('admin.profilsekolah', compact('profile', 'siswas'));
     }
 
     public function update(UpdateProfileRequest $request, Profile $profile)
@@ -47,7 +47,7 @@ class ProfileController extends Controller
         $profile->update($data);
 
         return redirect()
-            ->route('admin.profil.index')
+            ->route('admin.profilsekolah')
             ->with('success', 'Profil sekolah berhasil diperbarui!');
     }
 }
