@@ -3,54 +3,90 @@
 namespace App\Http\Controllers;
 
 use App\Models\Siswa;
-use App\Http\Requests\StoreSiswaRequest;
-use App\Http\Requests\UpdateSiswaRequest;
+use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $query = Siswa::query();
 
-        if (request('search')) {
-            $search = request('search');
+        if ($request->filled('search')) {
+            $search = $request->search;
 
             $query->where(function ($q) use ($search) {
                 $q->where('nama_siswa', 'like', '%' . $search . '%')
-                  ->orWhere('nisn', 'like', '%' . $search . '%')
-                  ->orWhere('jenis_kelamin', 'like', '%' . $search . '%')
-                  ->orWhere('tahun_masuk', 'like', '%' . $search . '%');
+                  ->orWhere('nisn', 'like', '%' . $search . '%');
             });
         }
 
         $siswas = $query
             ->orderBy('id_siswa', 'desc')
-            ->paginate(10)
-            ->withQueryString();
+            ->paginate(10);
 
-        return view('admin.siswa', compact('siswas'));
+        return view('admin.siswa.index', compact('siswas'));
     }
 
-    public function store(StoreSiswaRequest $request)
+    public function create()
     {
-        Siswa::create($request->validated());
+        return view('admin.siswa.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nisn'          => 'required|string|max:10',
+            'nama_siswa'    => 'required|string|max:40',
+            'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
+            'tahun_masuk'   => 'required|integer',
+        ]);
+
+        Siswa::create([
+            'nisn'          => $request->nisn,
+            'nama_siswa'    => $request->nama_siswa,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'tahun_masuk'   => $request->tahun_masuk,
+        ]);
 
         return redirect()
             ->route('admin.siswa.index')
             ->with('success', 'Data siswa berhasil ditambahkan!');
     }
 
-    public function update(UpdateSiswaRequest $request, Siswa $siswa)
+    public function edit($id)
     {
-        $siswa->update($request->validated());
+        $siswa = Siswa::findOrFail($id);
+
+        return view('admin.siswa.edit', compact('siswa'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $siswa = Siswa::findOrFail($id);
+
+        $request->validate([
+            'nisn'          => 'required|string|max:10',
+            'nama_siswa'    => 'required|string|max:40',
+            'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
+            'tahun_masuk'   => 'required|integer',
+        ]);
+
+        $siswa->update([
+            'nisn'          => $request->nisn,
+            'nama_siswa'    => $request->nama_siswa,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'tahun_masuk'   => $request->tahun_masuk,
+        ]);
 
         return redirect()
             ->route('admin.siswa.index')
             ->with('success', 'Data siswa berhasil diperbarui!');
     }
 
-    public function destroy(Siswa $siswa)
+    public function destroy($id)
     {
+        $siswa = Siswa::findOrFail($id);
+
         $siswa->delete();
 
         return redirect()
@@ -58,4 +94,3 @@ class SiswaController extends Controller
             ->with('success', 'Data siswa berhasil dihapus!');
     }
 }
-

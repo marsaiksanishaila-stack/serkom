@@ -26,7 +26,12 @@ class GuruController extends Controller
             ->orderBy('id_guru', 'desc')
             ->get();
 
-        return view('admin.guru', compact('gurus'));
+        return view('admin.guru.index', compact('gurus'));
+    }
+
+    public function create()
+    {
+        return view('admin.guru.create');
     }
 
     public function store(Request $request)
@@ -56,8 +61,15 @@ class GuruController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.guru')
+            ->route('admin.guru.index')
             ->with('success', 'Data guru berhasil ditambahkan!');
+    }
+
+    public function edit($id)
+    {
+        $guru = Guru::findOrFail($id);
+
+        return view('admin.guru.edit', compact('guru'));
     }
 
     public function update(Request $request, $id)
@@ -93,7 +105,7 @@ class GuruController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.guru')
+            ->route('admin.guru.index')
             ->with('success', 'Data guru berhasil diperbarui!');
     }
 
@@ -108,7 +120,7 @@ class GuruController extends Controller
         $guru->delete();
 
         return redirect()
-            ->route('admin.guru')
+            ->route('admin.guru.index')
             ->with('success', 'Data guru berhasil dihapus!');
     }
 }

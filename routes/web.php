@@ -13,11 +13,21 @@ use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\SearchController;
+
+Route::get('/', function () {
+    return view('landing');
+})->name('landing');
 
 // LOGIN
-Route::get('/', [LoginController::class, 'showLogin'])->name('login');
+Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.process');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
+Route::get('/admin/pencarian', [SearchController::class, 'index'])
+    ->middleware('auth')
+    ->name('admin.search');
 
 // ADMIN ROUTES WITH MIDDLEWARE
 Route::middleware(['admin'])->group(function () {
@@ -30,28 +40,28 @@ Route::middleware(['admin'])->group(function () {
     Route::put('/admin/profilsekolah/{profile}', [ProfileController::class, 'update'])->name('admin.profilsekolah.update');
 
     // GURU
-    Route::get('/guru', [GuruController::class, 'index'])->name('admin.guru');
-    Route::get('/guru/create', [GuruController::class, 'create'])->name('admin.guru.create');
-    Route::post('/guru', [GuruController::class, 'store'])->name('admin.guru.store');
-    Route::get('/guru/{guru}/edit', [GuruController::class, 'edit'])->name('admin.guru.edit');
-    Route::put('/guru/{guru}', [GuruController::class, 'update'])->name('admin.guru.update');
-    Route::delete('/guru/{guru}', [GuruController::class, 'destroy'])->name('admin.guru.destroy');
+    Route::get('/admin/guru', [GuruController::class, 'index'])->name('admin.guru.index');
+    Route::get('/admin/guru/create', [GuruController::class, 'create'])->name('admin.guru.create');
+    Route::post('/admin/guru', [GuruController::class, 'store'])->name('admin.guru.store');
+    Route::get('/admin/guru/{guru}/edit', [GuruController::class, 'edit'])->name('admin.guru.edit');
+    Route::put('/admin/guru/{guru}', [GuruController::class, 'update'])->name('admin.guru.update');
+    Route::delete('/admin/guru/{guru}', [GuruController::class, 'destroy'])->name('admin.guru.destroy');
 
     // SISWA
     Route::get('/admin/siswa', [SiswaController::class, 'index'])->name('admin.siswa.index');
-    Route::get('/siswa/create', [SiswaController::class, 'create'])->name('admin.siswa.create');
-    Route::post('/siswa', [SiswaController::class, 'store'])->name('admin.siswa.store');
-    Route::get('/siswa/{siswa}/edit', [SiswaController::class, 'edit'])->name('admin.siswa.edit');
-    Route::put('/siswa/{siswa}', [SiswaController::class, 'update'])->name('admin.siswa.update');
-    Route::delete('/siswa/{siswa}', [SiswaController::class, 'destroy'])->name('admin.siswa.destroy');
+    Route::get('/admin/siswa/create', [SiswaController::class, 'create'])->name('admin.siswa.create');
+    Route::post('/admin/siswa', [SiswaController::class, 'store'])->name('admin.siswa.store');
+    Route::get('/admin/siswa/{siswa}/edit', [SiswaController::class, 'edit'])->name('admin.siswa.edit');
+    Route::put('/admin/siswa/{siswa}', [SiswaController::class, 'update'])->name('admin.siswa.update');
+    Route::delete('/admin/siswa/{siswa}', [SiswaController::class, 'destroy'])->name('admin.siswa.destroy');
 
     // USER MANAGEMENT
-    Route::get('/user', [UserController::class, 'index'])->name('admin.user.index');
-    Route::get('/user/create', [UserController::class, 'create'])->name('admin.user.create');
-    Route::post('/user', [UserController::class, 'store'])->name('admin.user.store');
-    Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('admin.user.edit');
-    Route::put('/user/{user}', [UserController::class, 'update'])->name('admin.user.update');
-    Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('admin.user.destroy');
+    Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user.index');
+    Route::get('/admin/user/create', [UserController::class, 'create'])->name('admin.user.create');
+    Route::post('/admin/user', [UserController::class, 'store'])->name('admin.user.store');
+    Route::get('/admin/user/{user}/edit', [UserController::class, 'edit'])->name('admin.user.edit');
+    Route::put('/admin/user/{user}', [UserController::class, 'update'])->name('admin.user.update');
+    Route::delete('/admin/user/{user}', [UserController::class, 'destroy'])->name('admin.user.destroy');
 
     // BERITA
     Route::get('/berita', [BeritaController::class, 'index'])->name('admin.berita');

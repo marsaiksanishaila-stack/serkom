@@ -2,6 +2,10 @@
 
 @section('content')
 
+@php
+    $galeriTerbaru = \App\Models\Galeri::latest('tanggal')->take(4)->get();
+@endphp
+
 <main class="dashboard-content">
 
     <div class="container-fluid px-3 px-lg-4 py-4">
@@ -150,6 +154,54 @@
         </section>
 
 
+        {{-- AKSES CEPAT --}}
+        <section class="mb-4">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">
+                            <i class="bi bi-lightning-charge-fill me-2 text-primary"></i>
+                            Akses Cepat
+                        </h5>
+                        <p class="text-muted small mb-0">
+                            Akses menu yang sering digunakan
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row g-2">
+                    <div class="col-6 col-md-3">
+                        <a href="{{ route('admin.siswa.index') }}" class="btn btn-light border rounded-3 w-100 py-3 text-start">
+                            <i class="bi bi-people-fill text-primary me-2"></i>
+                            kelola Siswa
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-md-3">
+                        <a href="{{ route('admin.guru.index') }}" class="btn btn-light border rounded-3 w-100 py-3 text-start">
+                            <i class="bi bi-person-badge-fill text-success me-2"></i>
+                            Kelola Guru
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-md-3">
+                        <a href="{{ route('admin.berita') }}" class="btn btn-light border rounded-3 w-100 py-3 text-start">
+                            <i class="bi bi-newspaper text-info me-2"></i>
+                            Kelola Berita
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-md-3">
+                        <a href="{{ route('admin.pengumuman') }}" class="btn btn-light border rounded-3 w-100 py-3 text-start">
+                            <i class="bi bi-megaphone-fill text-warning me-2"></i>
+                            Pengumuman
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
         {{-- SISWA TERBARU + AGENDA --}}
 
         <section class="row g-3">
@@ -220,7 +272,7 @@
 
                             <tbody>
 
-                                @forelse($siswaTerbaru as $siswa)
+                                @forelse($siswaTerbaru->take(5) as $siswa)
 
                                     <tr>
 
@@ -316,7 +368,7 @@
 
                             {{-- PENGUMUMAN --}}
 
-                            @forelse($pengumumans as $pengumuman)
+                            @forelse($pengumumans->take(2) as $pengumuman)
 
                                 <div class="p-3 bg-light rounded-3 border-start border-4 border-primary">
 
@@ -349,7 +401,7 @@
 
                             {{-- BERITA --}}
 
-                            @forelse($beritas as $berita)
+                            @forelse($beritas->take(2) as $berita)
 
                                 <div class="p-3 bg-light rounded-3 border-start border-4 border-success">
 
@@ -382,7 +434,7 @@
 
                             {{-- PRESTASI --}}
 
-                            @forelse($prestasis as $prestasi)
+                            @forelse($prestasis->take(2) as $prestasi)
 
                                 <div class="p-3 bg-light rounded-3 border-start border-4 border-warning">
 
@@ -415,7 +467,7 @@
 
                             {{-- EKSTRAKURIKULER --}}
 
-                            @forelse($ekstrakurikulers as $ekskul)
+                            @forelse($ekstrakurikulers->take(2) as $ekskul)
 
                                 <div class="p-3 bg-light rounded-3 border-start border-4 border-info">
 
@@ -479,6 +531,109 @@
             </div>
 
         </section>
+
+
+        {{-- GALERI TERBARU --}}
+        <section class="mt-4">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+                <div class="card-header bg-white border-0 p-3 d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <h5 class="fw-bold mb-1">
+                            <i class="bi bi-images me-2 text-primary"></i>
+                            Galeri Terbaru
+                        </h5>
+
+                        <p class="text-muted small mb-0">
+                            Dokumentasi kegiatan sekolah terbaru
+                        </p>
+                    </div>
+
+                    <a href="{{ route('admin.galeri') }}"
+                       class="btn btn-outline-secondary btn-sm rounded-3">
+                        Lihat Semua
+                    </a>
+
+                </div>
+
+                <div class="card-body">
+
+                    @if($galeriTerbaru->isEmpty())
+
+                        <div class="text-center py-4">
+                            <i class="bi bi-images fs-2 text-muted"></i>
+                            <p class="text-muted mt-2 mb-0">
+                                Belum ada data galeri.
+                            </p>
+                        </div>
+
+                    @else
+
+                        <div class="row g-3">
+
+                            @foreach($galeriTerbaru as $galeri)
+
+                                <div class="col-6 col-md-3">
+
+                                    <div class="card border-0 shadow-sm rounded-3 overflow-hidden h-100">
+
+                                        <div style="height: 160px; background: #f8fafc;">
+
+                                            @if($galeri->kategori == 'Foto')
+
+                                                <img src="{{ asset('storage/' . $galeri->file) }}"
+                                                     alt="{{ $galeri->judul }}"
+                                                     style="width: 100%; height: 100%; object-fit: cover;">
+
+                                            @else
+
+                                                <video controls
+                                                       style="width: 100%; height: 100%; object-fit: cover;">
+                                                    <source src="{{ asset('storage/' . $galeri->file) }}">
+                                                </video>
+
+                                            @endif
+
+                                        </div>
+
+                                        <div class="p-3">
+
+                                            <span class="badge
+                                                {{ $galeri->kategori == 'Foto'
+                                                    ? 'bg-primary-subtle text-primary'
+                                                    : 'bg-danger-subtle text-danger' }}
+                                                mb-2">
+                                                {{ $galeri->kategori }}
+                                            </span>
+
+                                            <h6 class="fw-bold mb-1 text-truncate"
+                                                title="{{ $galeri->judul }}">
+                                                {{ $galeri->judul }}
+                                            </h6>
+
+                                            <p class="text-muted small mb-0">
+                                                <i class="bi bi-calendar3 me-1"></i>
+                                                {{ \Carbon\Carbon::parse($galeri->tanggal)->format('d-m-Y') }}
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            @endforeach
+
+                        </div>
+
+                    @endif
+
+                </div>
+
+            </div>
+        </section>
+
 
     </div>
 

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Admin Sekolah">
-    <title>Dashboard | Admin Sekolah</title>
+    <title>website | Admin Sekolah</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
@@ -27,19 +27,31 @@
             <div class="sidebar-header">
 
                 <a class="brand-mark"
-                   href="{{ route('admin.dashboard') }}"
-                   aria-label="Admin Sekolah">
+                href="{{ route('admin.dashboard') }}"
+                aria-label="Profil Sekolah">
 
-                    <!-- <span class="brand-icon">
-                        <i class="bi bi-mortarboard-fill" aria-hidden="true"></i>
-                    </span> -->
-                    <span class="brand-icon"> 
-                        <img src="{{ asset('assets/images/logo-ypc.jpg') }}" alt="Logo YPC" style="width: 42px; height: 42px; object-fit: contain;"> 
+                    <span class="brand-icon">
+                        @php
+                            $sidebarProfile = \App\Models\Profile::first();
+                        @endphp
+
+                        @if($sidebarProfile && $sidebarProfile->logo)
+                            <img src="{{ asset('storage/' . $sidebarProfile->logo) }}"
+                                alt="Logo Sekolah"
+                                style="width: 42px; height: 42px; object-fit: contain;">
+                        @else
+                            <i class="bi bi-building-fill"></i>
+                        @endif
                     </span>
 
                     <span class="brand-copy">
-                        <span class="brand-title">ADMIN SEKOLAH</span>
-                        <span class="brand-subtitle">SMK YPC TASIKMALAYA</span>
+                        <span class="brand-title">
+                            {{ $sidebarProfile->nama_sekolah ?? 'SMK YPC TASIKMALAYA' }}
+                        </span>
+
+                        <span class="brand-subtitle">
+                            Sistem Informasi Sekolah
+                        </span>
                     </span>
 
                 </a>
@@ -49,148 +61,123 @@
             <!-- MENU -->
             <nav class="sidebar-nav">
 
+                <div class="sidebar-section-title">MENU UTAMA</div>
+
                 <!-- DASHBOARD -->
                 <a href="{{ route('admin.dashboard') }}"
-                   class="sidebar-menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-                   id="menu-dashboard"
-                   title="Dashboard">
-
+                class="sidebar-menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                id="menu-dashboard"
+                title="Dashboard">
                     <span class="nav-icon">
                         <i class="bi bi-speedometer2" aria-hidden="true"></i>
                     </span>
-
                     <span class="nav-text">Dashboard</span>
-
                 </a>
 
-                <!-- USER -->
-                 @if(Auth::user()->role == 'Admin')
+                <div class="sidebar-section-title">MANAJEMEN</div>
+
+                @if(Auth::user()->role == 'Admin')
+                    <!-- USER -->
                     <a href="{{ route('admin.user.index') }}"
                     class="sidebar-menu-link {{ request()->routeIs('admin.user.*') ? 'active' : '' }}"
                     id="menu-user"
                     title="Kelola User">
-
                         <span class="nav-icon">
                             <i class="bi bi-person-gear" aria-hidden="true"></i>
                         </span>
-
                         <span class="nav-text">Kelola User</span>
-
                     </a>
                 @endif
 
                 <!-- PROFIL SEKOLAH -->
                 <a href="{{ route('admin.profilsekolah') }}"
-                   class="sidebar-menu-link {{ request()->routeIs('admin.profilsekolah') ? 'active' : '' }}"
-                   id="menu-profil"
-                   title="Profil Sekolah">
-
-                    <span class="nav-icon">
-                        <i class="bi bi-building-fill" aria-hidden="true"></i>
-                    </span>
-
-                    <span class="nav-text">Profil Sekolah</span>
-
+                    class="sidebar-menu-link {{ request()->routeIs('admin.profilsekolah') ? 'active' : '' }}"
+                    id="menu-profil"
+                    title="Profil Sekolah">
+                        <span class="nav-icon">
+                            <i class="bi bi-building-fill" aria-hidden="true"></i>
+                        </span>
+                        <span class="nav-text">Profil Sekolah</span>
                 </a>
 
                 <!-- GURU -->
-                <a href="{{ route('admin.guru') }}"
-                   class="sidebar-menu-link {{ request()->routeIs('admin.guru') ? 'active' : '' }}"
-                   id="menu-guru"
-                   title="Kelola Guru">
-
-                    <span class="nav-icon">
-                        <i class="bi bi-person-workspace" aria-hidden="true"></i>
-                    </span>
-
-                    <span class="nav-text">Kelola Guru</span>
-
+                <a href="{{ route('admin.guru.index') }}"
+                    class="sidebar-menu-link {{ request()->routeIs('admin.guru.index') ? 'active' : '' }}"
+                    id="menu-guru"
+                    title="Kelola Guru">
+                        <span class="nav-icon">
+                            <i class="bi bi-person-workspace" aria-hidden="true"></i>
+                        </span>
+                        <span class="nav-text">Kelola Guru</span>
                 </a>
 
                 <!-- SISWA -->
                 <a href="{{ route('admin.siswa.index') }}"
-                   class="sidebar-menu-link {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}"
-                   id="menu-siswa"
-                   title="Kelola Siswa">
-
-                    <span class="nav-icon">
-                        <i class="bi bi-people-fill" aria-hidden="true"></i>
-                    </span>
-
-                    <span class="nav-text">Kelola Siswa</span>
-
+                    class="sidebar-menu-link {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}"
+                    id="menu-siswa"
+                    title="Kelola Siswa">
+                        <span class="nav-icon">
+                            <i class="bi bi-people-fill" aria-hidden="true"></i>
+                        </span>
+                        <span class="nav-text">Kelola Siswa</span>
                 </a>
+
+                <div class="sidebar-section-title">KONTEN SEKOLAH</div>
 
                 <!-- BERITA -->
                 <a href="{{ route('admin.berita') }}"
-                   class="sidebar-menu-link {{ request()->routeIs('admin.berita') ? 'active' : '' }}"
-                   id="menu-berita"
-                   title="Kelola Berita">
-
-                    <span class="nav-icon">
-                        <i class="bi bi-newspaper" aria-hidden="true"></i>
-                    </span>
-
-                    <span class="nav-text">Kelola Berita</span>
-
+                    class="sidebar-menu-link {{ request()->routeIs('admin.berita') ? 'active' : '' }}"
+                    id="menu-berita"
+                    title="Kelola Berita">
+                        <span class="nav-icon">
+                            <i class="bi bi-newspaper" aria-hidden="true"></i>
+                        </span>
+                        <span class="nav-text">Kelola Berita</span>
                 </a>
 
                 <!-- GALERI -->
                 <a href="{{ route('admin.galeri') }}"
-                   class="sidebar-menu-link {{ request()->routeIs('admin.galeri') ? 'active' : '' }}"
-                   id="menu-galeri"
-                   title="Kelola Galeri">
-
-                    <span class="nav-icon">
-                        <i class="bi bi-images" aria-hidden="true"></i>
-                    </span>
-
-                    <span class="nav-text">Kelola Galeri</span>
-
+                    class="sidebar-menu-link {{ request()->routeIs('admin.galeri') ? 'active' : '' }}"
+                    id="menu-galeri"
+                    title="Kelola Galeri">
+                        <span class="nav-icon">
+                            <i class="bi bi-images" aria-hidden="true"></i>
+                        </span>
+                        <span class="nav-text">Kelola Galeri</span>
                 </a>
 
                 <!-- EKSTRAKURIKULER -->
                 <a href="{{ route('admin.ekstrakurikuler') }}"
-                   class="sidebar-menu-link {{ request()->routeIs('admin.ekstrakurikuler') ? 'active' : '' }}"
-                   id="menu-ekstrakurikuler"
-                   title="Kelola Ekstrakurikuler">
-
-                    <span class="nav-icon">
-                        <i class="bi bi-trophy-fill" aria-hidden="true"></i>
-                    </span>
-
-                    <span class="nav-text">Ekstrakurikuler</span>
-
+                    class="sidebar-menu-link {{ request()->routeIs('admin.ekstrakurikuler') ? 'active' : '' }}"
+                    id="menu-ekstrakurikuler"
+                    title="Kelola Ekstrakurikuler">
+                        <span class="nav-icon">
+                            <i class="bi bi-trophy-fill" aria-hidden="true"></i>
+                        </span>
+                        <span class="nav-text">Ekstrakurikuler</span>
                 </a>
 
                 <!-- PENGUMUMAN -->
                 <a href="{{ route('admin.pengumuman') }}"
-                   class="sidebar-menu-link {{ request()->routeIs('admin.pengumuman') ? 'active' : '' }}"
-                   id="menu-pengumuman"
-                   title="Kelola Pengumuman">
-
-                    <span class="nav-icon">
-                        <i class="bi bi-megaphone-fill" aria-hidden="true"></i>
-                    </span>
-
-                    <span class="nav-text">Pengumuman</span>
-
+                    class="sidebar-menu-link {{ request()->routeIs('admin.pengumuman') ? 'active' : '' }}"
+                    id="menu-pengumuman"
+                    title="Kelola Pengumuman">
+                        <span class="nav-icon">
+                            <i class="bi bi-megaphone-fill" aria-hidden="true"></i>
+                        </span>
+                        <span class="nav-text">Pengumuman</span>
                 </a>
 
                 <!-- PRESTASI -->
                 <a href="{{ route('admin.prestasi') }}"
-                   class="sidebar-menu-link {{ request()->routeIs('admin.prestasi') ? 'active' : '' }}"
-                   id="menu-prestasi"
-                   title="Kelola Prestasi">
-
-                    <span class="nav-icon">
-                        <i class="bi bi-award-fill" aria-hidden="true"></i>
-                    </span>
-
-                    <span class="nav-text">Kelola Prestasi</span>
-
+                    class="sidebar-menu-link {{ request()->routeIs('admin.prestasi') ? 'active' : '' }}"
+                    id="menu-prestasi"
+                    title="Kelola Prestasi">
+                        <span class="nav-icon">
+                            <i class="bi bi-award-fill" aria-hidden="true"></i>
+                        </span>
+                        <span class="nav-text">Kelola Prestasi</span>
                 </a>
-
             </nav>
 
             <!-- USER SIDEBAR -->
@@ -212,17 +199,12 @@
 
             <!-- STATUS -->
             <div class="sidebar-footer">
-
+                
                 <span class="status-dot"></span>
-
-                <span class="sidebar-footer-text">
-                    Sistem berjalan normal
-                </span>
-
+                <span class="sidebar-footer-text">Sistem berjalan normal</span>
             </div>
 
         </aside>
-
 
         <!-- MAIN CONTENT -->
         <div class="admin-main">
@@ -248,12 +230,17 @@
 
 
                     <!-- SEARCH -->
-                    <form class="d-none d-md-flex ms-3 flex-grow-1" role="search">
+                    <form action="{{ route('admin.search') }}"
+                            method="GET"
+                            class="d-none d-md-flex ms-3 flex-grow-1"
+                            role="search">
 
                         <input class="form-control search-input"
-                               type="search"
-                               placeholder="Cari data sekolah..."
-                               aria-label="Search">
+                                type="search"
+                                name="q"
+                                value="{{ request('q') }}"
+                                placeholder="Cari data sekolah..."
+                                aria-label="Search">
 
                     </form>
 
