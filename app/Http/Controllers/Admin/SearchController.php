@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+// Load semua model database yang ingin dicari datanya
 use App\Models\User;
 use App\Models\Siswa;
 use App\Models\Guru;
@@ -18,30 +19,36 @@ class SearchController extends Controller
 {
     public function index(Request $request)
     {
+        // 1. Ambil kata kunci dari inputan 'q' di URL, lalu hapus spasi di awal/akhir kata
         $keyword = trim($request->get('q', ''));
 
+        // Wadah kosong untuk menampung semua hasil pencarian dari berbagai tabel
         $results = collect();
 
+        // 2. Hanya jalankan pencarian jika user memasukkan kata kunci (tidak kosong)
         if ($keyword !== '') {
 
-            // SISWA
+            // --- CARI DATA SISWA ---
+            // Cari siswa yang nama atau NISN-nya mirip kata kunci (maksimal 10 data)
             $siswas = Siswa::where(function ($query) use ($keyword) {
                 $query->where('nama_siswa', 'like', '%' . $keyword . '%')
                       ->orWhere('nisn', 'like', '%' . $keyword . '%');
             })->limit(10)->get();
 
+            // Masukkan setiap data siswa yang ketemu ke dalam wadah $results
             foreach ($siswas as $item) {
                 $results->push([
                     'type' => 'Siswa',
                     'title' => $item->nama_siswa,
                     'description' => 'NISN: ' . $item->nisn,
                     'icon' => 'bi-person-fill',
-                    'url' => route('admin.siswa.index'),
+                    'url' => route('admin.siswa.index'), // Link menuju halaman siswa
                 ]);
             }
 
 
-            // GURU
+            // --- CARI DATA GURU ---
+            // Cari guru berdasarkan nama, NIP, atau mata pelajaran
             $gurus = Guru::where(function ($query) use ($keyword) {
                 $query->where('nama_guru', 'like', '%' . $keyword . '%')
                       ->orWhere('nip', 'like', '%' . $keyword . '%')
@@ -59,7 +66,8 @@ class SearchController extends Controller
             }
 
 
-            // BERITA
+            // --- CARI BERITA ---
+            // Cari berita berdasarkan judulnya
             $beritas = Berita::where('judul', 'like', '%' . $keyword . '%')
                 ->limit(10)
                 ->get();
@@ -75,7 +83,8 @@ class SearchController extends Controller
             }
 
 
-            // GALERI
+            // --- CARI GALERI ---
+            // Cari foto/album galeri berdasarkan judul
             $galeris = Galeri::where('judul', 'like', '%' . $keyword . '%')
                 ->limit(10)
                 ->get();
@@ -91,12 +100,11 @@ class SearchController extends Controller
             }
 
 
-            // EKSTRAKURIKULER
-            $ekstrakulers = Ekstrakurikuler::where(
-                'nama_ekskul',
-                'like',
-                '%' . $keyword . '%'
-            )->limit(10)->get();
+            // --- CARI EKSTRAKURIKULER ---
+            // Cari ekskul berdasarkan nama ekstrakurikuler
+            $ekstrakulers = Ekstrakurikuler::where('nama_ekskul', 'like', '%' . $keyword . '%')
+                ->limit(10)
+                ->get();
 
             foreach ($ekstrakulers as $item) {
                 $results->push([
@@ -109,12 +117,11 @@ class SearchController extends Controller
             }
 
 
-            // PENGUMUMAN
-            $pengumumans = Pengumuman::where(
-                'judul',
-                'like',
-                '%' . $keyword . '%'
-            )->limit(10)->get();
+            // --- CARI PENGUMUMAN ---
+            // Cari pengumuman berdasarkan judul
+            $pengumumans = Pengumuman::where('judul', 'like', '%' . $keyword . '%')
+                ->limit(10)
+                ->get();
 
             foreach ($pengumumans as $item) {
                 $results->push([
@@ -127,12 +134,11 @@ class SearchController extends Controller
             }
 
 
-            // PRESTASI
-            $prestasis = Prestasi::where(
-                'nama_prestasi',
-                'like',
-                '%' . $keyword . '%'
-            )->limit(10)->get();
+            // --- CARI PRESTASI ---
+            // Cari prestasi berdasarkan nama prestasi
+            $prestasis = Prestasi::where('nama_prestasi', 'like', '%' . $keyword . '%')
+                ->limit(10)
+                ->get();
 
             foreach ($prestasis as $item) {
                 $results->push([
@@ -145,7 +151,8 @@ class SearchController extends Controller
             }
 
 
-            // PROFIL SEKOLAH
+            // --- CARI PROFIL SEKOLAH ---
+            // Cari info profil sekolah (nama, NPSN, nama kepsek, alamat, atau kontak)
             $profiles = Profile::where(function ($query) use ($keyword) {
                 $query->where('nama_sekolah', 'like', '%' . $keyword . '%')
                       ->orWhere('npsn', 'like', '%' . $keyword . '%')
@@ -165,9 +172,11 @@ class SearchController extends Controller
             }
 
 
-            // USER - HANYA ADMIN
+            // --- CARI AKUN USER (KHUSUS ADMIN) ---
+            // Fitur ini hanya jalan kalau user yang lagi login punya role 'Admin'
             if (auth()->user()->role === 'Admin') {
 
+                // Cari akun berdasarkan username atau role
                 $users = User::where(function ($query) use ($keyword) {
                     $query->where('username', 'like', '%' . $keyword . '%')
                           ->orWhere('role', 'like', '%' . $keyword . '%');
@@ -185,6 +194,7 @@ class SearchController extends Controller
             }
         }
 
+        // 3. Tampilkan halaman pencarian ('admin.search') dan kirim data kata kunci beserta hasil pencariannya
         return view('admin.search', compact('keyword', 'results'));
     }
 }

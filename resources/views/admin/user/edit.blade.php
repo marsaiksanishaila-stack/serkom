@@ -2,127 +2,114 @@
 
 @section('content')
 
-<div class="container-fluid px-3 px-lg-4 py-4">
+    <div class="container-fluid px-3 px-lg-4 py-4">
 
-    <div class="mb-4">
-        <h3 class="fw-bold mb-1">Edit User</h3>
-        <p class="text-muted mb-0">Ubah informasi data pengguna sistem</p>
-    </div>
+        <div class="mb-4">
+            <h3 class="fw-bold mb-1">Edit User</h3>
+            <p class="text-muted mb-0">Ubah informasi data pengguna sistem</p>
+        </div>
 
-    <div class="card border-0 shadow-sm">
+        <div class="card border-0 shadow-sm">
 
-        <div class="card-body p-4">
+            <div class="card-body p-4">
 
-            <form action="{{ route('admin.user.update', $user->id_user) }}"
-                  method="POST">
+                <form action="{{ route('admin.user.update', request()->route('id')) }}" method="POST">
 
-                @csrf
-                @method('PUT')
+                    @csrf
+                    @method('PUT')
 
-                <!-- USERNAME -->
-                <div class="mb-3">
+                    <!-- USERNAME -->
+                    <div class="mb-3">
 
-                    <label class="form-label fw-semibold">
-                        Username <span class="text-danger">*</span>
-                    </label>
+                        <label class="form-label fw-semibold">
+                            Username <span class="text-danger">*</span>
+                        </label>
 
-                    <input type="text"
-                           name="username"
-                           class="form-control @error('username') is-invalid @enderror"
-                           value="{{ old('username', $user->username) }}"
-                           placeholder="Masukkan username"
-                           required>
+                        <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
+                            value="{{ old('username', $user->username) }}" placeholder="Masukkan username" required>
 
-                    @error('username')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
+                        @error('username')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
 
-                </div>
+                    </div>
 
-                <!-- ROLE -->
-                <div class="mb-3">
+                    <!-- ROLE -->
+                    <div class="mb-3">
 
-                    <label class="form-label fw-semibold">
-                        Role <span class="text-danger">*</span>
-                    </label>
+                        <label class="form-label fw-semibold">
+                            Role <span class="text-danger">*</span>
+                        </label>
 
-                    <select name="role"
-                            class="form-select @error('role') is-invalid @enderror"
-                            required>
+                        <select name="role" class="form-select @error('role') is-invalid @enderror" required>
 
-                        <option value="">-- Pilih Role --</option>
+                            <option value="">-- Pilih Role --</option>
 
-                        <option value="Admin"
-                            {{ old('role', $user->role) == 'Admin' ? 'selected' : '' }}>
-                            Admin
-                        </option>
+                            <option value="Admin" {{ old('role', $user->role) == 'Admin' ? 'selected' : '' }}>
+                                Admin
+                            </option>
 
-                        <option value="Operator"
-                            {{ old('role', $user->role) == 'Operator' ? 'selected' : '' }}>
-                            Operator
-                        </option>
+                            <option value="Operator" {{ old('role', $user->role) == 'Operator' ? 'selected' : '' }}>
+                                Operator
+                            </option>
 
-                    </select>
+                        </select>
 
-                    @error('role')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
+                        @error('role')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
 
-                </div>
+                    </div>
 
-                <!-- PASSWORD -->
-                <div class="mb-4">
+                    <!-- PASSWORD -->
+                    <div class="mb-4">
 
-                    <label class="form-label fw-semibold">
-                        Password Baru
-                    </label>
+                        <label class="form-label fw-semibold">
+                            Password Baru
+                        </label>
 
-                    <input type="password"
-                           name="password"
-                           class="form-control @error('password') is-invalid @enderror"
-                           placeholder="Kosongkan jika tidak ingin mengubah password">
+                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+                            placeholder="Kosongkan jika tidak ingin mengubah password">
 
-                    <small class="text-muted d-block mt-1">
-                        Biarkan kosong jika password tidak ingin diperbarui.
-                    </small>
+                        <small class="text-muted d-block mt-1">
+                            Biarkan kosong jika password tidak ingin diperbarui.
+                        </small>
 
-                    @error('password')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
+                        @error('password')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
 
-                </div>
+                    </div>
 
-                <!-- BUTTON -->
-                <div class="d-flex align-items-center gap-2">
+                    <!-- BUTTON -->
+                    <div class="d-flex align-items-center gap-2">
 
-                    <a href="{{ route('admin.user.index') }}"
-                       class="btn btn-secondary px-4">
-                        Kembali
-                    </a>
+                        <a href="{{ route('admin.user.index') }}" class="btn btn-secondary px-4">
+                            Kembali
+                        </a>
 
-                    <button type="submit"
-                            class="btn btn-primary px-4 d-inline-flex align-items-center gap-2">
+                        <button type="submit" class="btn btn-primary px-4 d-inline-flex align-items-center gap-2">
 
-                        <i class="bi bi-save"></i>
+                            <i class="bi bi-save"></i>
 
-                        <span>Simpan Perubahan</span>
+                            <span>Simpan Perubahan</span>
 
-                    </button>
+                        </button>
 
-                </div>
+                    </div>
 
-            </form>
+                </form>
+
+            </div>
 
         </div>
 
     </div>
-
-</div>
 
 @endsection

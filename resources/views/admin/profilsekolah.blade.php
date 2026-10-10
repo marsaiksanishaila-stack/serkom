@@ -1,14 +1,18 @@
+{{-- Mengambil master layout admin dari file layouts/admin.blade.php --}}
 @extends('layouts.admin')
 
+{{-- Mengisi bagian 'content' utama --}}
 @section('content')
 <div class="container-fluid px-4 py-4">
 
-    <!-- HEADER & TOGGLE BUTTON -->
+    {{-- HEADER & TOGGLE BUTTON TAB --}}
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
             <h3 class="fw-bold mb-1 text-dark">Profil Sekolah</h3>
             <p class="text-muted mb-0">Kelola identitas, kontak, dan informasi resmi sekolah</p>
         </div>
+        
+        {{-- Tab Navigasi: Lihat Profil vs Edit Data --}}
         <ul class="nav nav-pills bg-light p-1 rounded-3 border" id="profileTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active rounded-2 px-3 py-2 fw-semibold" id="view-tab" data-bs-toggle="tab" data-bs-target="#view-pane" type="button" role="tab">
@@ -23,7 +27,7 @@
         </ul>
     </div>
 
-    <!-- NOTIFIKASI SUKSES -->
+    {{-- NOTIFIKASI SUKSES --}}
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
             <div class="d-flex align-items-center">
@@ -34,7 +38,7 @@
         </div>
     @endif
 
-    <!-- NOTIFIKASI ERROR VALIDASI -->
+    {{-- NOTIFIKASI ERROR VALIDASI --}}
     @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
             <div class="d-flex align-items-center mb-1">
@@ -50,14 +54,14 @@
         </div>
     @endif
 
-    <!-- CONTENT TAB -->
+    {{-- CONTENT TAB --}}
     <div class="tab-content" id="profileTabContent">
 
-        <!-- ==================== 1. TAMPILAN PROFIL (CARD MODERN) ==================== -->
+        {{-- ==================== 1. TAMPILAN PROFIL (MODE BACA) ==================== --}}
         <div class="tab-pane fade show active" id="view-pane" role="tabpanel" tabindex="0">
             <div class="row g-4">
 
-                <!-- KARTU KIRI: LOGO & KEPALA SEKOLAH -->
+                {{-- KARTU KIRI: LOGO, NAMA & KEPALA SEKOLAH --}}
                 <div class="col-lg-4">
                     <div class="card border-0 shadow-sm rounded-4 overflow-hidden text-center p-4">
                         <div class="position-relative d-inline-block mx-auto mb-3">
@@ -97,7 +101,7 @@
                         </div>
                     </div>
 
-                    <!-- FOTO GEDUNG / PROFIL -->
+                    {{-- FOTO GEDUNG / PROFIL UTAMA --}}
                     @if (!empty($profile->foto))
                         <div class="card border-0 shadow-sm rounded-4 mt-4 overflow-hidden">
                             <div class="card-header bg-white border-0 pt-3 px-3">
@@ -110,20 +114,23 @@
                     @endif
                 </div>
 
-                <!-- KARTU KANAN: DETAIL INFORMASI -->
+                {{-- KARTU KANAN: DETAIL INFORMASI SEKOLAH --}}
                 <div class="col-lg-8">
                     <div class="card border-0 shadow-sm rounded-4 p-4">
 
+                        {{-- Alamat --}}
                         <div class="mb-4">
                             <h6 class="fw-bold text-primary text-uppercase fs-7 tracking-wide mb-2"><i class="bi bi-geo-alt me-1"></i> Alamat Lengkap</h6>
                             <p class="text-dark bg-light p-3 rounded-3 mb-0">{{ $profile->alamat ?? 'Alamat belum diisi.' }}</p>
                         </div>
 
+                        {{-- Visi & Misi --}}
                         <div class="mb-4">
                             <h6 class="fw-bold text-primary text-uppercase fs-7 tracking-wide mb-2"><i class="bi bi-compass me-1"></i> Visi & Misi</h6>
-                            <div class="p-3 bg-light rounded-3 text-secondary" style="white-space: pre-line; leading-trim: both;">{{ $profile->visi_misi ?? 'Visi & Misi belum diisi.' }}</div>
+                            <div class="p-3 bg-light rounded-3 text-secondary" style="white-space: pre-line;">{{ $profile->visi_misi ?? 'Visi & Misi belum diisi.' }}</div>
                         </div>
 
+                        {{-- Deskripsi / Sejarah --}}
                         <div>
                             <h6 class="fw-bold text-primary text-uppercase fs-7 tracking-wide mb-2"><i class="bi bi-journal-text me-1"></i> Sejarah / Deskripsi Singkat</h6>
                             <div class="p-3 bg-light rounded-3 text-secondary" style="white-space: pre-line;">{{ $profile->deskripsi ?? 'Deskripsi belum diisi.' }}</div>
@@ -135,7 +142,7 @@
             </div>
         </div>
 
-        <!-- ==================== 2. FORM EDIT PROFIL ==================== -->
+        {{-- ==================== 2. FORM EDIT PROFIL ==================== --}}
         <div class="tab-pane fade" id="edit-pane" role="tabpanel" tabindex="0">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-4">
@@ -144,59 +151,70 @@
                         @method('PUT')
 
                         <div class="row g-3">
+                            {{-- Nama Sekolah --}}
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-dark">Nama Sekolah <span class="text-danger">*</span></label>
                                 <input type="text" name="nama_sekolah" class="form-control form-control-lg fs-6" value="{{ old('nama_sekolah', $profile->nama_sekolah ?? '') }}" required>
                             </div>
 
+                            {{-- Kepala Sekolah --}}
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-dark">Kepala Sekolah <span class="text-danger">*</span></label>
                                 <input type="text" name="kepala_sekolah" class="form-control form-control-lg fs-6" value="{{ old('kepala_sekolah', $profile->kepala_sekolah ?? '') }}" required>
                             </div>
 
+                            {{-- NPSN --}}
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold text-dark">NPSN</label>
                                 <input type="text" name="npsn" class="form-control" value="{{ old('npsn', $profile->npsn ?? '') }}">
                             </div>
 
+                            {{-- Kontak --}}
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold text-dark">Kontak / Telepon</label>
                                 <input type="text" name="kontak" class="form-control" value="{{ old('kontak', $profile->kontak ?? '') }}">
                             </div>
 
+                            {{-- Tahun Berdiri --}}
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold text-dark">Tahun Berdiri</label>
                                 <input type="number" name="tahun_berdiri" class="form-control" value="{{ old('tahun_berdiri', $profile->tahun_berdiri ?? '') }}">
                             </div>
 
+                            {{-- File Logo --}}
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-dark">Logo Sekolah</label>
                                 <input type="file" name="logo" class="form-control" accept="image/*">
                                 <small class="text-muted">Format: PNG, JPG (Maks 2MB)</small>
                             </div>
 
+                            {{-- File Foto Gedung --}}
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-dark">Foto Profil / Gedung</label>
                                 <input type="file" name="foto" class="form-control" accept="image/*">
                                 <small class="text-muted">Format: JPG, PNG (Maks 4MB)</small>
                             </div>
 
+                            {{-- Alamat --}}
                             <div class="col-12">
                                 <label class="form-label fw-semibold text-dark">Alamat Lengkap</label>
                                 <textarea name="alamat" class="form-control" rows="2">{{ old('alamat', $profile->alamat ?? '') }}</textarea>
                             </div>
 
+                            {{-- Visi & Misi --}}
                             <div class="col-12">
                                 <label class="form-label fw-semibold text-dark">Visi & Misi</label>
                                 <textarea name="visi_misi" class="form-control" rows="4">{{ old('visi_misi', $profile->visi_misi ?? '') }}</textarea>
                             </div>
 
+                            {{-- Deskripsi --}}
                             <div class="col-12">
                                 <label class="form-label fw-semibold text-dark">Deskripsi / Sejarah</label>
                                 <textarea name="deskripsi" class="form-control" rows="4">{{ old('deskripsi', $profile->deskripsi ?? '') }}</textarea>
                             </div>
                         </div>
 
+                        {{-- Tombol Submit --}}
                         <div class="mt-4 pt-3 border-top text-end">
                             <button type="submit" class="btn btn-primary btn-lg px-4 fs-6 shadow-sm">
                                 <i class="bi bi-check-circle me-1"></i> Simpan Perubahan
@@ -210,7 +228,7 @@
     </div>
 </div>
 
-<!-- OTOMATIS BUKA TAB EDIT JIKA ADA ERROR VALIDASI -->
+{{-- SCRIPT: Otomatis Buka Tab Edit Jika Ada Error Validasi Form --}}
 @if ($errors->any())
 <script>
     document.addEventListener("DOMContentLoaded", function() {

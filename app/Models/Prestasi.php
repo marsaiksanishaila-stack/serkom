@@ -16,8 +16,21 @@ class Prestasi extends Model
 
     protected $fillable = [
         'nama_prestasi',
+        'slug',
         'deskripsi',
         'foto',
         'tahun_ajaran',
     ];
+
+    /**
+     * Accessor untuk URL foto prestasi (default jika kosong)
+     */
+    public function getFotoUrlAttribute(): string
+    {
+        if ($this->foto && file_exists(public_path('storage/prestasi/' . $this->foto))) {
+            return asset('storage/prestasi/' . $this->foto);
+        }
+
+        return asset('images/default-prestasi.jpg');
+    }
 }
