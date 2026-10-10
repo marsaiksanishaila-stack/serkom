@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// Import semua model yang dibutuhkan untuk ditampilkan di halaman depan web
 use App\Models\Profile;
 use App\Models\Siswa;
 use App\Models\Guru;
@@ -11,17 +10,16 @@ use App\Models\Galeri;
 use App\Models\Ekstrakurikuler;
 use App\Models\Pengumuman;
 use App\Models\Prestasi;
-use Illuminate\Support\Facades\Crypt; // Untuk enkripsi ID di URL
+use Illuminate\Support\Facades\Crypt;
 
 class LandingController extends Controller
 {
-    // --- HALAMAN UTAMA / BERANDA (LANDING PAGE) ---
+    // HALAMAN UTAMA / BERANDA
     public function index()
     {
-        // Ambil data profil sekolah dari database
+        // Data profil sekolah
         $profile = Profile::first();
 
-        // Siapkan variabel informasi sekolah (kalau di database kosong, pakai nilai bawaan)
         $namaSekolah = $profile->nama_sekolah ?? 'SMK YPC Tasikmalaya';
         $npsn = $profile->npsn ?? '-';
         $kepalaSekolah = $profile->kepala_sekolah ?? '-';
@@ -29,38 +27,37 @@ class LandingController extends Controller
         $kontak = $profile->kontak ?? '-';
         $heroImage = $profile->foto ?? null;
 
-        // --- STATISTIK & PREVIEW DATA UNTUK BERANDA ---
-
-        // 1. Total Siswa
+        // STATISTIK SISWA
         $jumlahSiswa = Siswa::count();
 
-        // 2. Data Guru
+        // STATISTIK DAN DATA GURU
         $jumlahGuru = Guru::count();
+
         $gurus = Guru::orderBy('id_guru', 'desc')
-            ->take(5) // Ambil 5 guru terbaru
+            ->take(5)
             ->get();
 
-        // Enkripsi ID guru untuk keamanan link
         foreach ($gurus as $guru) {
-            $guru->encrypted_id = Crypt::encrypt(
-                $guru->id_guru
-            );
+            $guru->encrypted_id = Crypt::encrypt($guru->id_guru);
         }
 
-        // 3. Data Ekstrakurikuler
+        // STATISTIK DAN DATA EKSTRAKURIKULER
         $jumlahEkskul = Ekstrakurikuler::count();
+
         $ekstrakurikulers = Ekstrakurikuler::orderBy('id_ekskul', 'desc')
-            ->take(3) // Ambil 3 ekskul terbaru
+            ->take(3)
             ->get();
 
-        // Enkripsi ID ekskul untuk keamanan link
         foreach ($ekstrakurikulers as $ekstrakurikuler) {
             $ekstrakurikuler->encrypted_id = Crypt::encrypt(
                 $ekstrakurikuler->id_ekskul
             );
         }
 
-        // 4. Data Berita (3 Berita Terbaru)
+        // STATISTIK JUMLAH PRESTASI
+        $jumlahPrestasi = Prestasi::count();
+
+        // DATA BERITA
         $beritas = Berita::latest()
             ->take(3)
             ->get();
@@ -71,7 +68,7 @@ class LandingController extends Controller
             );
         }
 
-        // 5. Data Galeri (5 Foto/Video Terbaru)
+        // DATA GALERI
         $galeris = Galeri::latest('tanggal')
             ->take(5)
             ->get();
@@ -82,7 +79,7 @@ class LandingController extends Controller
             );
         }
 
-        // 6. Data Pengumuman (3 Pengumuman Terbaru)
+        // DATA PENGUMUMAN
         $pengumumans = Pengumuman::latest('tanggal')
             ->take(3)
             ->get();
@@ -93,7 +90,7 @@ class LandingController extends Controller
             );
         }
 
-        // 7. Data Prestasi (5 Prestasi Terbaru)
+        // DATA PRESTASI
         $prestasis = Prestasi::orderBy('tahun_ajaran', 'desc')
             ->take(5)
             ->get();
@@ -104,7 +101,7 @@ class LandingController extends Controller
             );
         }
 
-        // Kirim semua data ringkasan ke tampilan landing page
+        // KIRIM DATA KE LANDING PAGE
         return view('landing', compact(
             'profile',
             'namaSekolah',
@@ -117,6 +114,7 @@ class LandingController extends Controller
             'jumlahGuru',
             'gurus',
             'jumlahEkskul',
+            'jumlahPrestasi',
             'ekstrakurikulers',
             'beritas',
             'galeris',
@@ -125,7 +123,7 @@ class LandingController extends Controller
         ));
     }
 
-    // --- HALAMAN "TENTANG SEKOLAH" ---
+    // HALAMAN TENTANG SEKOLAH
     public function tentang()
     {
         $profile = Profile::first();
@@ -139,11 +137,10 @@ class LandingController extends Controller
         $visi = '';
         $misi = '';
 
-        // Trik memisahkan teks Visi dan Misi dari 1 kolom database secara otomatis (pakai Regex)
+        // Memisahkan teks visi dan misi
         if ($profile && $profile->visi_misi) {
             $visiMisi = $profile->visi_misi;
 
-            // Cari teks setelah kata "Visi:" sampai sebelum kata "Misi:"
             if (preg_match(
                 '/Visi\s*:?(.*?)(?=Misi\s*:|$)/is',
                 $visiMisi,
@@ -152,7 +149,6 @@ class LandingController extends Controller
                 $visi = trim($visiMatch[1]);
             }
 
-            // Cari teks setelah kata "Misi:" sampai akhir kalimat
             if (preg_match(
                 '/Misi\s*:?(.*)$/is',
                 $visiMisi,
@@ -174,7 +170,7 @@ class LandingController extends Controller
         ));
     }
 
-    // --- HALAMAN "KONTAK SEKOLAH" ---
+    // HALAMAN KONTAK SEKOLAH
     public function kontak()
     {
         $profile = Profile::first();

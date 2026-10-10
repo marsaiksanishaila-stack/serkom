@@ -48,7 +48,7 @@
 
                 <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
                     <div class="stat-icon"><i class="bi bi-award-fill"></i></div>
-                    <div><strong>{{ $profile->akreditasi ?? '-' }}</strong> <span>Akreditasi</span></div>
+                    <div><strong>{{ $jumlahPrestasi }}</strong> <span>Prestasi</span></div>
                 </div>
             </div>
         </div>
