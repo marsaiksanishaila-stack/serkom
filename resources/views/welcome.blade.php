@@ -273,5 +273,25 @@
         @if (Route::has('login'))
             <div class="h-14.5 hidden lg:block"></div>
         @endif
+        {{-- @error('barang1')
+        <p>{{ $message }}</p>
+    @enderror --}}
+
+
+{{-- @if(isset($total))
+
+    <h3>Hasil Perhitungan</h3>
+
+    <p>Nama Barang 1: {{ $request->barang1 }}</p>
+    <p>Harga Barang 1: Rp{{ number_format($request->harga1, 0, ',', '.') }}</p>
+
+    <p>Nama Barang 2: {{ $request->barang2 }}</p>
+    <p>Harga Barang 2: Rp{{ number_format($request->harga2, 0, ',', '.') }}</p>
+
+    <h3>Total Belanja: Rp{{ number_format($total, 0, ',', '.') }}</h3>
+
+    <p>Hadiah: {{ $hadiah }}</p>
+
+@endif --}}
     </body>
 </html>

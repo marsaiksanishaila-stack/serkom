@@ -1,13 +1,10 @@
-{{-- Mengambil master layout dari file layouts/landing.blade.php --}}
 @extends('layouts.landing')
 
-{{-- Mengisi bagian 'content' utama --}}
 @section('content')
 
 <section class="teacher-detail-page">
     <div class="container">
 
-        {{-- Navigasi Breadcrumb --}}
         <nav class="teacher-breadcrumb" aria-label="breadcrumb">
             <a href="{{ url('/') }}"><i class="bi bi-house-door-fill"></i> Beranda</a>
             <span><i class="bi bi-chevron-right"></i></span>
@@ -16,11 +13,9 @@
             <span class="active">{{ $guru->nama_guru }}</span>
         </nav>
 
-        {{-- Kartu Detail Guru --}}
         <div class="teacher-detail-card-wrapper" data-aos="fade-up">
             <div class="teacher-detail-layout">
 
-                {{-- Foto Profil Utama Guru --}}
                 <div class="teacher-detail-photo">
                     @if($guru->foto)
                         <img src="{{ asset('storage/guru/' . $guru->foto) }}" alt="{{ $guru->nama_guru }}">
@@ -31,7 +26,6 @@
                     @endif
                 </div>
 
-                {{-- Informasi Detail Guru --}}
                 <div class="teacher-detail-info">
                     
                     <div class="teacher-header-info">
@@ -40,7 +34,6 @@
                         <p class="teacher-subtitle">{{ $guru->mapel ?? 'Tenaga Pendidik' }}</p>
                     </div>
 
-                    {{-- Data Rincian Kepegawaian --}}
                     <div class="teacher-detail-data">
                         <div class="teacher-data-item">
                             <div class="data-icon"><i class="bi bi-briefcase-fill"></i></div>
@@ -79,7 +72,6 @@
             </div>
         </div>
 
-        {{-- Daftar Guru Lainnya --}}
         @if(isset($guruLainnya) && $guruLainnya->count())
             <section class="other-teacher-section" data-aos="fade-up">
                 <div class="other-teacher-heading">

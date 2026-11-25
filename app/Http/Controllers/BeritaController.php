@@ -4,34 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\Berita;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; // Untuk kelola hapus/simpan file foto
-use Illuminate\Support\Facades\Crypt;   // Untuk enkripsi & dekripsi ID di URL
-use Illuminate\Support\Str;              // Untuk membuat slug otomatis dari judul
-
+use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\Crypt; 
+use Illuminate\Support\Str;           
 class BeritaController extends Controller
 {
-    // --- HALAMAN UTAMA ADMIN BERITA ---
+
     public function index(Request $request)
     {
-        // Ambil data berita beserta pembuatnya (relasi user)
+
         $query = Berita::with('user');
 
-        // Filter berdasarkan pencarian judul berita (jika ada)
         if ($request->filled('search')) {
             $query->where('judul', 'like', '%' . $request->search . '%');
         }
 
-        // Filter berdasarkan status (Draft/Public) jika ada
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Urutkan dari tanggal berita paling terbaru
+
         $beritas = $query
             ->orderBy('tanggal', 'desc')
             ->get();
 
-        // Enkripsi ID setiap berita agar aman dari keisengan ubah URL
         foreach ($beritas as $berita) {
             $berita->encrypted_id = Crypt::encrypt($berita->id_berita);
         }
@@ -39,43 +35,38 @@ class BeritaController extends Controller
         return view('admin.berita.index', compact('beritas'));
     }
 
-    // --- FORM TAMBAH BERITA ---
     public function create()
     {
         return view('admin.berita.create');
     }
 
-    // --- PROSES SIMPAN BERITA BARU ---
+
     public function store(Request $request)
     {
-        // Validasi input
+
         $request->validate([
             'judul' => 'required|max:100',
             'isi' => 'required',
             'tanggal' => 'required|date',
             'status' => 'required|in:Draft,Public',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // Foto opsional, max 2MB
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $foto = null;
 
-        // Jika ada upload foto, simpan ke folder 'storage/app/public/berita'
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto')->store('berita', 'public');
         }
 
-        // Buat slug otomatis dari judul (Contoh: "Berita Hari Ini" -> "berita-hari-ini")
         $slug = Str::slug($request->judul);
         $slugAsli = $slug;
         $counter = 1;
 
-        // Jika slug sudah ada di database, tambahkan angka dibelakangnya (misal: "berita-hari-ini-1")
         while (Berita::where('slug', $slug)->exists()) {
             $slug = $slugAsli . '-' . $counter;
             $counter++;
         }
 
-        // Simpan data berita ke database
         Berita::create([
             'judul' => $request->judul,
             'slug' => $slug,
@@ -83,7 +74,7 @@ class BeritaController extends Controller
             'tanggal' => $request->tanggal,
             'foto' => $foto,
             'status' => $request->status,
-            'id_user' => auth()->user()->id_user, // Mengambil ID pembuat dari user yang lagi login
+            'id_user' => auth()->user()->id_user,
         ]);
 
         return redirect()

@@ -1,6 +1,3 @@
-/* ================================
-   1. VARIABLES & BASE STYLES
-================================ */
 :root {
     --primary: #2E7D32;
     --primary-dark: #1B5E20;
@@ -33,9 +30,7 @@ a {
     text-decoration: none;
 }
 
-/* ================================
-   2. NAVBAR & OFFCANVAS MOBILE
-================================ */
+
 .landing-navbar {
     position: sticky;
     top: 0;
@@ -58,29 +53,14 @@ a {
     align-items: center;
     gap: 12px;
     color: var(--text);
-    text-decoration: none; /* Menghapus garis bawah link */
+    text-decoration: none; 
 }
 
-/* 1. KUSUS GAMBAR LOGO (Tanpa Background/Kotak Biru) */
 .school-logo img {
     width: 48px;
     height: 48px;
     object-fit: contain;
-    background: transparent !important; /* Paksa transparan */
-    border-radius: 0 !important;        /* Hilangkan lengkungan kotak jika ada */
-}
-
-/* 2. KHUSUS FALLBACK LOGO DEFAULT (Kotak Biru kalau gambar tidak ada) */
-.logo-default {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--primary);
-    color: #fff;
-    border-radius: 8px;
-    font-size: 23px;
+    
 }
 
 .school-logo strong {
@@ -97,11 +77,12 @@ a {
     margin-top: 4px;
 }
 
-/* Desktop Menu */
+
 .desktop-menu {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 0px;
+
 }
 
 .desktop-menu>a,
@@ -126,22 +107,6 @@ a {
     color: var(--primary);
 }
 
-.login-button {
-    margin-left: 10px;
-    padding: 10px 17px;
-    background: var(--primary);
-    color: #fff !important;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.login-button:hover {
-    background: var(--primary-dark);
-    color: #fff !important;
-}
-
-/* Dropdown */
 .nav-dropdown {
     position: relative;
 }
@@ -162,18 +127,15 @@ a {
 
 .dropdown-menu-custom {
     position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
+    top: 50px;
     min-width: 190px;
     padding: 8px;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
-    opacity: 0;
     visibility: hidden;
     transform: translateY(8px);
     transition: all .2s ease;
-    z-index: 9999;
 }
 
 .nav-dropdown:hover .dropdown-menu-custom {
@@ -184,20 +146,14 @@ a {
 
 .dropdown-menu-custom a {
     display: flex;
-    align-items: center;
     gap: 10px;
     padding: 10px 12px;
     color: #334155;
-    text-decoration: none;
     font-size: 14px;
     font-weight: 600;
     border-radius: 7px;
-    transition: all .2s ease;
 }
 
-.dropdown-menu-custom a i {
-    font-size: 15px;
-}
 
 .dropdown-menu-custom a:hover,
 .dropdown-menu-custom a.active {
@@ -214,7 +170,6 @@ a {
     height: 10px;
 }
 
-/* Mobile Nav Toggler & Offcanvas Sidebar */
 .mobile-nav-toggler {
     font-size: 26px;
     color: var(--primary);
@@ -896,16 +851,6 @@ a {
     border-radius: 20px;
 }
 
-/* Share Section */
-.teacher-share {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding-top: 20px;
-    border-top: 1px solid #EDF0EC;
-    margin-top: 28px;
-    margin-bottom: 40px;
-}
 
 .teacher-share>span {
     font-size: 14px;
@@ -1055,9 +1000,7 @@ a {
     font-size: 12px;
 }
 
-/* ================================
-   9. INFORMASI SEKOLAH
-================================ */
+
 .information-section {
     padding: 90px 0;
     background: var(--light);
@@ -2052,22 +1995,6 @@ a {
     font-size: 27px;
 }
 
-.gallery-page-overlay {
-    position: absolute;
-    inset: auto 0 0;
-    padding: 55px 20px 20px;
-    background: linear-gradient(transparent, rgba(20, 35, 25, .88));
-    color: #fff;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: .3s ease;
-}
-
-.gallery-page-card:hover .gallery-page-overlay {
-    opacity: 1;
-    transform: translateY(0);
-}
-
 .gallery-page-info {
     padding: 20px 20px 22px;
 }
@@ -2631,7 +2558,7 @@ a {
 
 .school-footer-brand-content h3 {
     margin: 2px 0 8px;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 700;
     color: #ffffff;
 }
@@ -2689,7 +2616,7 @@ a {
 
 .school-footer-column>a:hover {
     color: #ffffff;
-    transform: translateX(4px);
+    transform: translateX(1px);
 }
 
 .school-footer-column>a:hover i {
@@ -2728,7 +2655,7 @@ a {
     border-top: 1px solid rgba(255, 255, 255, 0.10);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 16px;
     color: rgba(255, 255, 255, 0.55);
     font-size: 13px;
@@ -2785,7 +2712,7 @@ a {
     }
 
     .hero h1 { font-size: 47px; }
-    .teacher-grid { grid-template-columns: repeat(3, 1fr); }
+    .teacher-grid { grid-template-columns: repeat(2, 1fr); }
     .achievement-grid { grid-template-columns: repeat(2, 1fr); }
 }
 

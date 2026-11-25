@@ -45,6 +45,14 @@ Route::get('/ekstrakurikuler/{slug}', [EkstrakurikulerController::class, 'public
 
 Route::get('/kontak', [LandingController::class, 'kontak'])->name('kontak');
 
+Route::get('/ujikom', function () {
+    return view('landing.ujikom.index');
+})->name('landing.ujikom.index');
+
+Route::post('/ujikom', [LandingController::class, 'hitungBarang'])
+    ->name('ujikom.hitung');
+
+
 /*
 |--------------------------------------------------------------------------
 | LOGIN

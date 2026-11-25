@@ -11,13 +11,13 @@ use App\Models\Ekstrakurikuler;
 use App\Models\Pengumuman;
 use App\Models\Prestasi;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
     // HALAMAN UTAMA / BERANDA
     public function index()
     {
-        // Data profil sekolah
         $profile = Profile::first();
 
         $namaSekolah = $profile->nama_sekolah ?? 'SMK YPC Tasikmalaya';
@@ -30,7 +30,7 @@ class LandingController extends Controller
         // STATISTIK SISWA
         $jumlahSiswa = Siswa::count();
 
-        // STATISTIK DAN DATA GURU
+        // STATISTIK GURU
         $jumlahGuru = Guru::count();
 
         $gurus = Guru::orderBy('id_guru', 'desc')
@@ -41,7 +41,7 @@ class LandingController extends Controller
             $guru->encrypted_id = Crypt::encrypt($guru->id_guru);
         }
 
-        // STATISTIK DAN DATA EKSTRAKURIKULER
+        // STATISTIK EKSTRAKURIKULER
         $jumlahEkskul = Ekstrakurikuler::count();
 
         $ekstrakurikulers = Ekstrakurikuler::orderBy('id_ekskul', 'desc')
@@ -54,7 +54,7 @@ class LandingController extends Controller
             );
         }
 
-        // STATISTIK JUMLAH PRESTASI
+        // STATISTIK PRESTASI
         $jumlahPrestasi = Prestasi::count();
 
         // DATA BERITA
@@ -112,9 +112,9 @@ class LandingController extends Controller
             'heroImage',
             'jumlahSiswa',
             'jumlahGuru',
+            'jumlahPrestasi',
             'gurus',
             'jumlahEkskul',
-            'jumlahPrestasi',
             'ekstrakurikulers',
             'beritas',
             'galeris',
@@ -137,7 +137,7 @@ class LandingController extends Controller
         $visi = '';
         $misi = '';
 
-        // Memisahkan teks visi dan misi
+        // MEMISAHKAN TEKS VISI DAN MISI
         if ($profile && $profile->visi_misi) {
             $visiMisi = $profile->visi_misi;
 
@@ -186,6 +186,31 @@ class LandingController extends Controller
             'npsn',
             'alamat',
             'kontak'
+        ));
+    }
+
+    // FUNGSI HITUNG BARANG - UJIKOM
+    public function hitungBarang(Request $request)
+    {
+        $request->validate([
+            'barang1' => 'required|string',
+            'harga1' => 'required|numeric|min:0',
+            'barang2' => 'required|string',
+            'harga2' => 'required|numeric|min:0',
+        ]);
+
+        $total = $request->harga1 + $request->harga2;
+
+        if ($total > 500000) {
+            $bonus = 'Mendapatkan gelas cantik';
+        } else {
+            $bonus = 'Mendapatkan pensil';
+        }
+
+        return view('landing.ujikom.index', compact(
+            'request',
+            'total',
+            'bonus'
         ));
     }
 }

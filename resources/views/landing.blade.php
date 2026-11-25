@@ -1,9 +1,7 @@
-{{-- Mengambil master layout --}}
 @extends('layouts.landing')
 
 @section('content')
 
-    {{-- SECTION 1: HERO --}}
     <section class="hero" id="beranda">
         @if ($heroImage)
             <img src="{{ asset('storage/' . $heroImage) }}" alt="{{ $namaSekolah }}" class="hero-image">
@@ -27,7 +25,6 @@
         </div>
     </section>
 
-    {{-- SECTION 2: STATISTIK --}}
     <section class="stats-wrapper">
         <div class="container">
             <div class="stats-box">
@@ -48,13 +45,12 @@
 
                 <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
                     <div class="stat-icon"><i class="bi bi-award-fill"></i></div>
-                    <div><strong>{{ $jumlahPrestasi }}</strong> <span>Prestasi</span></div>
+                    <div><strong>{{ $jumlahPrestasi }}+</strong> <span>Prestasi</span></div>
                 </div>
             </div>
         </div>
     </section>
 
-    {{-- SECTION 3: TENTANG SEKOLAH --}}
     <section class="about-section" id="tentang">
         <div class="container">
             <div class="section-header" data-aos="fade-up">
@@ -76,7 +72,6 @@
 
                         <div class="about-badge">
                             <strong>{{ $namaSekolah }}</strong>
-                            <span>Tasikmalaya</span>
                         </div>
                     </div>
                 </div>
@@ -101,17 +96,12 @@
                                 <div><small>Alamat</small><strong>{{ $alamat }}</strong></div>
                             </div>
                         </div>
-
-                        <a href="{{ route('tentang') }}" class="btn-main">
-                            Selengkapnya <i class="bi bi-arrow-right"></i>
-                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    {{-- SECTION 4: GURU --}}
     <section class="teacher-section" id="guru">
         <div class="container">
             <div class="section-header" data-aos="fade-up">
@@ -160,13 +150,13 @@
         </div>
     </section>
 
-    {{-- SECTION 5: EKSTRAKURIKULER --}}
     <section class="ekskul-section" id="ekstrakurikuler">
         <div class="container">
             <div class="section-header" data-aos="fade-up">
                 <span>KEGIATAN SEKOLAH</span>
                 <h2>Ekstrakurikuler</h2>
-                <p>Berbagai kegiatan ekstrakurikuler untuk mengembangkan bakat, minat, dan potensi siswa {{ $namaSekolah }}.</p>
+                <p>Berbagai kegiatan ekstrakurikuler untuk mengembangkan bakat, minat, dan potensi siswa {{ $namaSekolah }}.
+                </p>
             </div>
 
             <div class="ekskul-grid" data-aos="fade-up">
@@ -175,7 +165,8 @@
                         <a href="{{ route('ekstrakurikuler.show', $ekstrakurikuler->slug ?? $ekstrakurikuler->encrypted_id) }}">
                             <div class="ekskul-image">
                                 @if ($ekstrakurikuler->gambar)
-                                    <img src="{{ asset('storage/' . $ekstrakurikuler->gambar) }}" alt="{{ $ekstrakurikuler->nama_ekskul }}">
+                                    <img src="{{ asset('storage/' . $ekstrakurikuler->gambar) }}"
+                                        alt="{{ $ekstrakurikuler->nama_ekskul }}">
                                 @else
                                     <div class="gallery-placeholder"><i class="bi bi-stars"></i></div>
                                 @endif
@@ -183,7 +174,8 @@
                         </a>
 
                         <div class="ekskul-content">
-                            <a href="{{ route('ekstrakurikuler.show', $ekstrakurikuler->slug ?? $ekstrakurikuler->encrypted_id) }}" class="text-decoration-none text-dark">
+                            <a href="{{ route('ekstrakurikuler.show', $ekstrakurikuler->slug ?? $ekstrakurikuler->encrypted_id) }}"
+                                class="text-decoration-none text-dark">
                                 <h3>{{ $ekstrakurikuler->nama_ekskul }}</h3>
                             </a>
 
@@ -191,7 +183,8 @@
                                 <p>{{ Str::limit(strip_tags($ekstrakurikuler->deskripsi), 100) }}</p>
                             @endif
 
-                            <a href="{{ route('ekstrakurikuler.show', $ekstrakurikuler->slug ?? $ekstrakurikuler->encrypted_id) }}" class="ekskul-link">
+                            <a href="{{ route('ekstrakurikuler.show', $ekstrakurikuler->slug ?? $ekstrakurikuler->encrypted_id) }}"
+                                class="ekskul-link">
                                 Lihat Selengkapnya <i class="bi bi-arrow-right"></i>
                             </a>
                         </div>
@@ -215,7 +208,6 @@
         </div>
     </section>
 
-    {{-- SECTION 6: INFORMASI TERBARU --}}
     <section class="information-section" id="prestasi">
         <div class="container">
             <div class="section-header" data-aos="fade-up">
@@ -226,9 +218,10 @@
 
             <div class="information-grid">
 
-                {{-- PENGUMUMAN --}}
                 <div class="information-card" id="pengumuman" data-aos="fade-up">
-                    <div class="information-title"><h3>Pengumuman</h3></div>
+                    <div class="information-title">
+                        <h3>Pengumuman</h3>
+                    </div>
                     <div class="information-line"></div>
 
                     <div class="information-list">
@@ -236,7 +229,7 @@
                             <div class="information-item">
                                 <h4>
                                     <a href="{{ route('pengumuman.show', $pengumuman->encrypted_id) }}"
-                                    class="text-decoration-none text-dark">
+                                        class="text-decoration-none text-dark">
                                         {{ $pengumuman->judul ?? $pengumuman->nama_pengumuman ?? 'Pengumuman Sekolah' }}
                                     </a>
                                 </h4>
@@ -267,17 +260,20 @@
                     @endif
                 </div>
 
-                {{-- PRESTASI --}}
                 <div class="information-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="information-title"><h3>Prestasi</h3></div>
+                    <div class="information-title">
+                        <h3>Prestasi</h3>
+                    </div>
                     <div class="information-line"></div>
 
                     <div class="information-list">
                         @forelse ($prestasis as $prestasi)
-                            <a href="{{ route('prestasi.show', $prestasi->slug ?? $prestasi->encrypted_id) }}" class="information-item achievement-item text-decoration-none text-dark">
+                            <a href="{{ route('prestasi.show', $prestasi->slug ?? $prestasi->encrypted_id) }}"
+                                class="information-item achievement-item text-decoration-none text-dark">
                                 <div class="achievement-small-icon"><i class="bi bi-trophy-fill"></i></div>
                                 <div>
-                                    <h4>{{ $prestasi->nama_prestasi ?? $prestasi->judul ?? $prestasi->prestasi ?? 'Prestasi Sekolah' }}</h4>
+                                    <h4>{{ $prestasi->nama_prestasi ?? $prestasi->judul ?? $prestasi->prestasi ?? 'Prestasi Sekolah' }}
+                                    </h4>
 
                                     @if (!empty($prestasi->tahun_ajaran))
                                         <span class="information-date">
@@ -309,9 +305,10 @@
                     @endif
                 </div>
 
-                {{-- BERITA --}}
                 <div class="information-card" id="berita" data-aos="fade-up" data-aos-delay="200">
-                    <div class="information-title"><h3>Berita</h3></div>
+                    <div class="information-title">
+                        <h3>Berita</h3>
+                    </div>
                     <div class="information-line"></div>
 
                     <div class="information-news">
@@ -334,14 +331,16 @@
                                     @endif
 
                                     <h4>
-                                        <a href="{{ route('berita.show', $berita->slug ?? $berita->encrypted_id) }}" class="text-decoration-none text-dark">
+                                        <a href="{{ route('berita.show', $berita->slug ?? $berita->encrypted_id) }}"
+                                            class="text-decoration-none text-dark">
                                             {{ $berita->judul }}
                                         </a>
                                     </h4>
 
                                     <p>{{ Str::limit(strip_tags($berita->isi), 90) }}</p>
 
-                                    <a href="{{ route('berita.show', $berita->slug ?? $berita->encrypted_id) }}">Selengkapnya »</a>
+                                    <a href="{{ route('berita.show', $berita->slug ?? $berita->encrypted_id) }}">Selengkapnya
+                                        »</a>
                                 </div>
                             </article>
                         @empty
@@ -360,7 +359,6 @@
         </div>
     </section>
 
-    {{-- SECTION 7: GALERI --}}
     <section class="gallery-section" id="galeri">
         <div class="container">
             <div class="section-header" data-aos="fade-up">
@@ -381,7 +379,8 @@
                             @if ($isVideo)
                                 <div class="gallery-video-wrapper" style="width: 100%; height: 100%;">
                                     <video width="100%" height="100%" controls style="object-fit: cover;">
-                                        <source src="{{ asset('storage/' . $galeri->file) }}" type="{{ $extension === 'mov' ? 'video/mp4' : 'video/' . $extension }}">
+                                        <source src="{{ asset('storage/' . $galeri->file) }}"
+                                            type="{{ $extension === 'mov' ? 'video/mp4' : 'video/' . $extension }}">
                                         Browser Anda tidak mendukung pemutaran video.
                                     </video>
                                 </div>
@@ -394,7 +393,8 @@
                             <div class="gallery-placeholder"><i class="bi bi-images"></i></div>
                         @endif
 
-                        <a href="{{ route('galeri.show', $galeri->slug ?? $galeri->encrypted_id) }}" class="gallery-caption text-decoration-none text-dark">
+                        <a href="{{ route('galeri.show', $galeri->slug ?? $galeri->encrypted_id) }}"
+                            class="gallery-caption text-decoration-none text-dark">
                             <strong>{{ $galeri->judul }}</strong>
 
                             @if ($galeri->tanggal)
@@ -420,7 +420,6 @@
         </div>
     </section>
 
-    {{-- SECTION 8: KONTAK --}}
     <section class="contact-section" id="kontak">
         <div class="container">
             <div class="section-header" data-aos="fade-up">

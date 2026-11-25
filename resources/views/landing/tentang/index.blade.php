@@ -1,14 +1,10 @@
-{{-- Mengambil master layout dari file layouts/landing.blade.php --}}
 @extends('layouts.landing')
 
-{{-- Mengisi bagian 'content' utama --}}
 @section('content')
 
-    {{-- SECTION TENTANG SEKOLAH --}}
     <section class="about-page-section">
         <div class="container">
 
-            {{-- Header Section --}}
             <div class="section-heading">
                 <span class="content-label">TENTANG SEKOLAH</span>
                 <h2>Profil {{ $namaSekolah ?? 'Sekolah' }}</h2>
@@ -18,10 +14,8 @@
                 </p>
             </div>
 
-            {{-- Grid Profil Sekolah --}}
             <div class="about-page-grid">
 
-                {{-- Foto Profil / Gedung Sekolah --}}
                 <div class="about-page-image" data-aos="fade-right" data-aos-duration="800">
                     @if($profile && $profile->foto)
                         <img src="{{ asset('storage/' . $profile->foto) }}" alt="{{ $namaSekolah }}" loading="lazy">
@@ -32,17 +26,14 @@
                     @endif
                 </div>
 
-                {{-- Informasi Singkat Profil Sekolah --}}
                 <div class="about-page-content" data-aos="fade-left" data-aos-duration="800">
                     <span class="about-page-subtitle">PROFIL SEKOLAH</span>
                     <h2>{{ $namaSekolah }}</h2>
 
                     <p>{{ $profile->deskripsi ?? 'Belum ada deskripsi sekolah.' }}</p>
 
-                    {{-- Informasi Kontak & Identitas Singkat --}}
                     <div class="about-page-info">
 
-                        {{-- Kepala Sekolah --}}
                         <div class="about-info-item">
                             <i class="bi bi-person-badge"></i>
                             <div>
@@ -51,7 +42,6 @@
                             </div>
                         </div>
 
-                        {{-- NPSN --}}
                         <div class="about-info-item">
                             <i class="bi bi-card-text"></i>
                             <div>
@@ -60,7 +50,6 @@
                             </div>
                         </div>
 
-                        {{-- Alamat --}}
                         <div class="about-info-item">
                             <i class="bi bi-geo-alt"></i>
                             <div>
@@ -69,7 +58,6 @@
                             </div>
                         </div>
 
-                        {{-- Kontak --}}
                         <div class="about-info-item">
                             <i class="bi bi-telephone"></i>
                             <div>
@@ -86,7 +74,6 @@
         </div>
     </section>
 
-    {{-- SECTION VISI & MISI --}}
     <section class="vision-mission-section">
         <div class="container">
 
@@ -108,7 +95,6 @@
                     <h3>Visi & Misi</h3>
 
                     @if($profile && $profile->visi_misi)
-                        {{-- Mengubah karakter enter/newline menjadi breakline HTML <br> --}}
                         <p>{!! nl2br(e($profile->visi_misi)) !!}</p>
                     @else
                         <p>Visi dan misi sekolah belum tersedia.</p>

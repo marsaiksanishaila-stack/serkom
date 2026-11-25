@@ -1,16 +1,12 @@
-{{-- Mengambil master layout dari file layouts/landing.blade.php --}}
 @extends('layouts.landing')
 
-{{-- Mengatur title halaman dinamis --}}
 @section('title', 'Ekstrakurikuler')
 
-{{-- Mengisi bagian 'content' utama --}}
 @section('content')
 
 <section class="ekskul-page-section">
     <div class="container">
 
-        {{-- Header Section --}}
         <div class="section-header">
             <span>KEGIATAN SEKOLAH</span>
             <h2>Ekstrakurikuler</h2>
@@ -20,13 +16,10 @@
             </p>
         </div>
 
-        {{-- Grid Daftar Ekstrakurikuler --}}
         <div class="ekskul-grid">
-            {{-- Perulangan data ekskul, jika kosong lari ke @empty --}}
             @forelse($ekstrakurikulers as $ekstrakurikuler)
                 <div class="ekskul-card" data-aos="fade-up">
 
-                    {{-- Gambar / Placeholder Ekskul --}}
                     <div class="ekskul-image">
                         @if($ekstrakurikuler->gambar)
                             <img src="{{ asset('storage/' . $ekstrakurikuler->gambar) }}"
@@ -39,11 +32,9 @@
                         @endif
                     </div>
 
-                    {{-- Informasi Singkat Ekskul --}}
                     <div class="ekskul-content">
                         <h3>{{ $ekstrakurikuler->nama_ekskul }}</h3>
 
-                        {{-- Nama Pembina --}}
                         @if($ekstrakurikuler->pembina)
                             <div class="ekskul-info">
                                 <i class="bi bi-person"></i>
@@ -51,7 +42,6 @@
                             </div>
                         @endif
 
-                        {{-- Jadwal Latihan --}}
                         @if($ekstrakurikuler->jadwal_latihan)
                             <div class="ekskul-info">
                                 <i class="bi bi-calendar3"></i>
@@ -59,14 +49,12 @@
                             </div>
                         @endif
 
-                        {{-- Cuplikan Deskripsi (Dipotong max 120 karakter) --}}
                         @if($ekstrakurikuler->deskripsi)
                             <p>{{ Str::limit(strip_tags($ekstrakurikuler->deskripsi), 120) }}</p>
                         @else
                             <p>Informasi ekstrakurikuler belum tersedia.</p>
                         @endif
 
-                        {{-- Link ke Detail Ekskul berdasarkan Slug --}}
                         <a href="{{ route('ekstrakurikuler.show', ['slug' => $ekstrakurikuler->slug]) }}" class="ekskul-link">
                             Lihat Selengkapnya <i class="bi bi-arrow-right"></i>
                         </a>
@@ -74,7 +62,6 @@
 
                 </div>
             @empty
-                {{-- Tampilan jika data ekskul masih kosong --}}
                 <div class="empty-box">
                     <i class="bi bi-stars"></i>
                     <h4>Belum Ada Ekstrakurikuler</h4>
